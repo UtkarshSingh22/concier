@@ -1,0 +1,159 @@
+// 🔒 CORE SYSTEM - DO NOT MODIFY
+// This is the database schema for the SaaS boilerplate.
+// Users should NOT edit this file. The schema ensures subscription and entitlement logic.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User model for authentication and profile data
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  role          String    @default("user") // "user" or "admin"
+
+  // Auth relationships
+  accounts Account[]
+  sessions Session[]
+
+  // Subscription relationships
+  subscriptions Subscription[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+// NextAuth.js Account model
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+// NextAuth.js Session model
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+// Subscription plans (free, pro, enterprise, etc.)
+model Plan {
+  id          String   @id @default(cuid())
+  name        String   @unique // "free", "pro", "enterprise"
+  displayName String   // "Free Plan", "Pro Plan"
+  description String?
+  price       Int      // Price in cents (0 for free)
+  interval    String   @default("month") // "month", "year"
+  isActive    Boolean  @default(true)
+  stripeId    String?  @unique // Stripe price ID
+
+  // Relationships
+  subscriptions Subscription[]
+  entitlements  PlanEntitlement[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("plans")
+}
+
+// User subscriptions to plans
+model Subscription {
+  id               String            @id @default(cuid())
+  userId           String
+  planId           String
+  stripeId         String?           @unique // Stripe subscription ID
+  status           SubscriptionStatus @default(active)
+  currentPeriodStart DateTime?
+  currentPeriodEnd   DateTime?
+  cancelAtPeriodEnd  Boolean         @default(false)
+
+  // Relationships
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan Plan @relation(fields: [planId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, planId, status]) // User can only have one active subscription per plan type
+  @@map("subscriptions")
+}
+
+// Features/access rights that plans provide
+model Entitlement {
+  id          String @id @default(cuid())
+  name        String @unique // "feature_basic", "feature_pro", "api_calls_1000"
+  displayName String // "Basic Features", "Pro Features", "1000 API Calls"
+  description String?
+
+  // Relationships
+  plans PlanEntitlement[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("entitlements")
+}
+
+// Many-to-many relationship between Plans and Entitlements
+model PlanEntitlement {
+  id            String @id @default(cuid())
+  planId        String
+  entitlementId String
+
+  plan        Plan        @relation(fields: [planId], references: [id], onDelete: Cascade)
+  entitlement Entitlement @relation(fields: [entitlementId], references: [id], onDelete: Cascade)
+
+  @@unique([planId, entitlementId])
+  @@map("plan_entitlements")
+}
+
+// NextAuth.js verification tokens
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+enum SubscriptionStatus {
+  incomplete
+  incomplete_expired
+  trialing
+  active
+  past_due
+  canceled
+  unpaid
+  paused
+}
