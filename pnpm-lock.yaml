@@ -57,7 +57,7 @@ dependencies:
     specifier: ^2.0.7
     version: 2.0.7(react-dom@19.2.3)(react@19.2.3)
   stripe:
-    specifier: ^16.10.0
+    specifier: ^16.12.0
     version: 16.12.0
   tailwind-merge:
     specifier: ^3.4.0

@@ -20,7 +20,7 @@ import { Separator } from "@/components/ui/separator";
 import { Loader2, Mail } from "lucide-react";
 import { toast } from "sonner";
 
-export default function AuthForm() {
+const AuthForm = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<string | null>(null);
   const [email, setEmail] = useState("");
@@ -178,4 +178,6 @@ export default function AuthForm() {
       </CardContent>
     </Card>
   );
-}
+};
+
+export default AuthForm;

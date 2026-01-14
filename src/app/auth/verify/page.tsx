@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 
-export default function VerifyPage() {
+const VerifyPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [status, setStatus] = useState<"loading" | "success" | "error">(
@@ -137,4 +137,6 @@ export default function VerifyPage() {
       </div>
     </div>
   );
-}
+};
+
+export default VerifyPage;

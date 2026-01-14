@@ -93,3 +93,60 @@ export async function getActiveSubscription() {
   const user = await requireAuth();
   return user.subscriptions.find((sub) => sub.status === "active");
 }
+
+// Client-side helpers for subscription management
+export async function getCurrentUserSubscription() {
+  const { getServerSession } = await import("next-auth");
+  const { authOptions } = await import("./auth");
+
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.email) {
+    return null;
+  }
+
+  const { db } = await import("./db");
+  const user = await db.user.findUnique({
+    where: { email: session.user.email },
+    include: {
+      subscriptions: {
+        where: { status: "active" },
+        include: {
+          plan: {
+            include: {
+              entitlements: {
+                include: {
+                  entitlement: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+
+  return user?.subscriptions[0] || null;
+}
+
+export async function getCurrentUserEntitlements() {
+  const subscription = await getCurrentUserSubscription();
+
+  if (!subscription) {
+    // Return free plan entitlements
+    const { db } = await import("./db");
+    const freePlan = await db.plan.findUnique({
+      where: { name: "free" },
+      include: {
+        entitlements: {
+          include: {
+            entitlement: true,
+          },
+        },
+      },
+    });
+
+    return freePlan?.entitlements.map((pe) => pe.entitlement) || [];
+  }
+
+  return subscription.plan.entitlements.map((pe) => pe.entitlement);
+}
