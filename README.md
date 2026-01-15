@@ -37,11 +37,12 @@ Open [localhost:3000](http://localhost:3000) → Login → Upgrade → **First p
 
 ## 🔧 Tech Stack
 
-- **Next.js** (App Router)
+- **Next.js 14** (App Router + Turbopack)
 - **PostgreSQL** (Prisma ORM)
-- **Auth.js** (OAuth: Google + GitHub)
-- **Stripe** (Billing & subscriptions)
-- **Resend** (Email)
+- **Auth.js v4** (OAuth: Google + GitHub + Email Magic Links)
+- **Stripe** (Billing & subscriptions with webhooks)
+- **Resend** (Modular email system with React templates)
+- **Sonner** (Toast notifications)
 - **Vercel** (Deployment)
 
 ## 🛠️ Setup
@@ -66,18 +67,28 @@ Open [localhost:3000](http://localhost:3000) → Login → Upgrade → **First p
 
 ## 📋 What's Included
 
-✅ Authentication (OAuth Google + GitHub)  
-✅ Database schema & migrations  
-✅ Billing & subscriptions  
-✅ Paywall / access control  
-✅ Webhooks & entitlements  
-✅ Email sending  
-✅ Deployment ready
+✅ Authentication (OAuth Google + Email Magic Links)
+✅ Database schema & migrations
+✅ Billing & subscriptions with smart data refresh
+✅ Paywall / access control with entitlements
+✅ Webhooks & automatic entitlement sync
+✅ Modular email system (Welcome, Subscription, Payment Failed, Contact)
+✅ Toast notifications & status messages
+✅ Deployment ready (Vercel + PostgreSQL)
+
+## ✨ Recent Features
+
+- **Smart Subscription Management**: Auto-refresh billing data after payments
+- **Modular Email System**: React-based email templates (Welcome, Subscription, Payment Failed, Contact)
+- **Enhanced Checkout Flow**: Status messages and loading indicators
+- **Toast Notifications**: Success/error feedback throughout the app
+- **Improved UX**: Loading states and better error handling
+- **Arrow Function Components**: Modern, consistent code style
 
 ## 🎯 Philosophy
 
-**Opinionated > flexible**  
-**Shipping > teaching**  
+**Opinionated > flexible**
+**Shipping > teaching**
 **Confidence > customization**
 
 This boilerplate handles everything around your product. You build the product itself.

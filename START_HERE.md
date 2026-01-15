@@ -14,6 +14,7 @@ cp .env.example .env
 # - DATABASE_URL (your PostgreSQL connection string)
 # - STRIPE_SECRET_KEY & STRIPE_WEBHOOK_SECRET (from Stripe dashboard)
 # - RESEND_API_KEY (from Resend for email)
+# - EMAIL_FROM (your verified sender email, optional)
 ```
 
 **Note**: This project requires Node.js 20.9.0+.
@@ -109,8 +110,9 @@ The boilerplate handles:
 
 - ✅ **Authentication**: Google OAuth + Email Magic Links
 - ✅ **Database**: PostgreSQL with Prisma ORM
-- ✅ **Email**: Passwordless auth via Resend
-- ✅ **UI**: Modern design with shadcn/ui + Tailwind
+- ✅ **Email**: Passwordless auth + modular email system (Welcome, Subscription, Payment Failed, Contact)
+- ✅ **Billing**: Stripe subscriptions with smart data refresh
+- ✅ **UI**: Modern design with shadcn/ui + Tailwind + Toast notifications
 - ✅ **Security**: Enterprise-grade session management
 
 **You focus on building your product features.**
@@ -121,9 +123,11 @@ Swift Deploy includes a complete subscription system:
 
 - **Plans & Entitlements**: Flexible permission system
 - **Stripe Integration**: Secure payment processing
-- **Subscription Dashboard**: `/product/subscription` for billing management
+- **Billing Dashboard**: `/billing` for subscription management
+- **Smart Data Refresh**: Auto-updates after payments (no manual refresh needed)
+- **Status Messages**: Success/error feedback during checkout
 - **Webhook Sync**: Automatic entitlement updates
-- **Upgrade Flow**: One-click subscription upgrades
+- **Upgrade Flow**: One-click subscription upgrades with loading indicators
 
 ### Adding New Plans
 
@@ -133,6 +137,48 @@ Swift Deploy includes a complete subscription system:
 4. **Update UI** to show new plan options
 
 The system automatically handles billing, webhooks, and entitlement management.
+
+## 📧 Email System
+
+Swift Deploy includes a modular email system built on Resend:
+
+- **Welcome Emails**: Automated welcome messages for new users
+- **Subscription Confirmations**: Payment success notifications
+- **Payment Failed Alerts**: Retry payment notifications
+- **Contact Form Forwarding**: Admin notifications for user inquiries
+- **React Templates**: Professional, responsive email designs
+- **Type-Safe**: Full TypeScript support with proper validation
+
+### Testing Emails
+
+Test the email system from the product dashboard:
+
+1. Navigate to `/product`
+2. Scroll to the "📧 Test Email System" section
+3. Click "Send Welcome Email"
+4. Check your inbox for the professionally designed email
+
+### Adding New Email Types
+
+```typescript
+// Add to src/lib/email.ts
+async sendCustomEmail({
+  to,
+  subject,
+  // ... props
+}: CustomEmailProps) {
+  const { CustomEmail } = await import("@/emails/templates/CustomEmail");
+
+  return sendEmail({
+    to,
+    subject: "Custom Subject",
+    template: CustomEmail,
+    templateProps: { /* ... */ },
+  });
+}
+```
+
+The email system is fully extensible and production-ready.
 
 ## 🔐 Authentication System
 
@@ -158,10 +204,11 @@ Clean, professional SaaS design with modern components:
 ## 🔧 Tech Stack
 
 - **Frontend**: Next.js 14, React 19, TypeScript
-- **Styling**: Tailwind CSS, shadcn/ui
-- **Authentication**: NextAuth.js v4
+- **Styling**: Tailwind CSS, shadcn/ui, Sonner (toasts)
+- **Authentication**: NextAuth.js v4 (Google OAuth + Email Magic Links)
 - **Database**: PostgreSQL + Prisma ORM
-- **Email**: Resend API
+- **Payments**: Stripe (Subscriptions + Webhooks)
+- **Email**: Resend API (Modular React-based email system)
 - **Deployment**: Vercel-ready
 - **Development**: Turbopack for fast builds
 
