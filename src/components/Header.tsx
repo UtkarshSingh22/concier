@@ -1,16 +1,19 @@
-// 🔒 CORE SYSTEM - DO NOT MODIFY
-// Header component with user info and sign out functionality.
-// Users should NOT edit this file. Build your product logic in /product instead.
+// 🏗️ USER EDITABLE - HEADER COMPONENT
+// Customize navigation, branding, and user menu.
+// This component is editable - modify links, styling, and behavior.
 
 "use client";
 
 import { signOut, useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Header = () => {
   const { data: session, status } = useSession();
+  const pathname = usePathname();
 
   const handleSignOut = () => {
     signOut({ callbackUrl: "/auth" });
@@ -45,20 +48,40 @@ const Header = () => {
 
           <div className="flex items-center space-x-4">
             {session?.user && (
-              <div className="flex items-center space-x-2">
-                {session.user.image && (
-                  <Image
-                    className="h-8 w-8 rounded-full"
-                    src={session.user.image}
-                    alt={session.user.name || "User"}
-                    width={32}
-                    height={32}
-                  />
+              <>
+                {pathname === "/billing" ? (
+                  <Link href="/product">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="inline-flex items-center gap-2"
+                    >
+                      <ArrowLeft className="h-4 w-4" />
+                      Back to Dashboard
+                    </Button>
+                  </Link>
+                ) : (
+                  <Link href="/billing">
+                    <Button variant="ghost" size="sm">
+                      Billing
+                    </Button>
+                  </Link>
                 )}
-                <span className="text-sm text-gray-700">
-                  {session.user.name || session.user.email}
-                </span>
-              </div>
+                <div className="flex items-center space-x-2">
+                  {session.user.image && (
+                    <Image
+                      className="h-8 w-8 rounded-full"
+                      src={session.user.image}
+                      alt={session.user.name || "User"}
+                      width={32}
+                      height={32}
+                    />
+                  )}
+                  <span className="text-sm text-gray-700">
+                    {session.user.name || session.user.email}
+                  </span>
+                </div>
+              </>
             )}
 
             <Button onClick={handleSignOut} size="sm">
