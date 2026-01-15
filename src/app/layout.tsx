@@ -6,6 +6,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { SessionProvider } from "@/components/SessionProvider";
 import { Toaster } from "@/components/ui/sonner";
+import { createHomeMetadata } from "@/lib/seo";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -18,11 +19,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "SaaS Boilerplate - Build Your Product",
-  description:
-    "Production-ready SaaS boilerplate with authentication, billing, and payments",
-};
+export const metadata: Metadata = createHomeMetadata();
 
 export default function RootLayout({
   children,

@@ -62,7 +62,7 @@ export const SubscriptionConfirmationEmail = ({
 
             <Text style={paragraph}>
               If you have any questions about your subscription or need
-              assistance, please don't hesitate to contact our support team.
+              assistance, please don&apos;t hesitate to contact our support team.
             </Text>
 
             <Text style={paragraph}>

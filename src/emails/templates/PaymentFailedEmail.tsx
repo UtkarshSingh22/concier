@@ -36,7 +36,7 @@ export const PaymentFailedEmail = ({
 
             <Text style={paragraph}>
               We were unable to process your payment of {amount}. This can
-              happen for several reasons, and we've included the details below.
+              happen for several reasons, and we&apos;ve included the details below.
             </Text>
 
             <Section style={errorDetails}>
@@ -46,7 +46,7 @@ export const PaymentFailedEmail = ({
             </Section>
 
             <Text style={paragraph}>
-              Don't worry! You can try the payment again with a different
+              Don&apos;t worry! You can try the payment again with a different
               payment method, or update your billing information.
             </Text>
 
@@ -58,7 +58,7 @@ export const PaymentFailedEmail = ({
 
             <Text style={paragraph}>
               If you continue to experience issues or have questions about your
-              payment, please contact our support team. We're here to help!
+              payment, please contact our support team. We&apos;re here to help!
             </Text>
 
             <Text style={paragraph}>

@@ -1,4 +1,19 @@
 import Image from "next/image";
+import type { Metadata } from "next";
+import { createHomeMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = createHomeMetadata({
+  openGraph: {
+    images: [
+      {
+        url: "/og-homepage.jpg", // Add this image to your public folder
+        width: 1200,
+        height: 630,
+        alt: "Welcome to SaaS Boilerplate",
+      },
+    ],
+  },
+});
 
 const Home = () => {
   return (

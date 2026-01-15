@@ -28,7 +28,7 @@ export const WelcomeEmail = ({ userName, loginUrl }: WelcomeEmailProps) => {
             <Text style={greeting}>Hi {userName},</Text>
 
             <Text style={paragraph}>
-              Welcome aboard! Thank you for joining our platform. We're excited
+              Welcome aboard! Thank you for joining our platform. We&apos;re excited
               to have you as part of our community.
             </Text>
 
@@ -60,7 +60,7 @@ export const WelcomeEmail = ({ userName, loginUrl }: WelcomeEmailProps) => {
           <Section style={footer}>
             <Text style={footerText}>
               This email was sent to you because you recently created an account
-              with Your SaaS App. If you didn't create this account, please
+              with Your SaaS App. If you didn&apos;t create this account, please
               ignore this email.
             </Text>
           </Section>
