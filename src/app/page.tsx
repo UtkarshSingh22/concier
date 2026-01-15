@@ -46,6 +46,12 @@ const Home = () => {
             </div>
             <div className="flex space-x-6">
               <Link
+                href="/contact"
+                className="text-gray-400 hover:text-white text-sm transition-colors"
+              >
+                Contact
+              </Link>
+              <Link
                 href="/privacy"
                 className="text-gray-400 hover:text-white text-sm transition-colors"
               >
