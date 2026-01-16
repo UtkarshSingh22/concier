@@ -11,6 +11,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const Header = () => {
   const { data: session, status } = useSession();
@@ -22,14 +23,14 @@ const Header = () => {
 
   if (status === "loading") {
     return (
-      <header className="bg-white shadow">
+      <header className="border-b bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
-              <div className="animate-pulse h-8 w-32 bg-gray-200 rounded"></div>
+              <div className="animate-pulse h-8 w-32 bg-muted rounded"></div>
             </div>
             <div className="flex items-center space-x-4">
-              <div className="animate-pulse h-8 w-20 bg-gray-200 rounded"></div>
+              <div className="animate-pulse h-8 w-20 bg-muted rounded"></div>
             </div>
           </div>
         </div>
@@ -38,16 +39,16 @@ const Header = () => {
   }
 
   return (
-    <header className="bg-white shadow">
+    <header className="border-b bg-background transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <Link href="/product" className="text-xl font-bold text-gray-900">
+            <Link href="/product" className="text-xl font-bold text-foreground">
               Your SaaS
             </Link>
           </div>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2">
             {session?.user && (
               <>
                 {pathname === "/billing" ? (
@@ -78,12 +79,14 @@ const Header = () => {
                       height={32}
                     />
                   )}
-                  <span className="text-sm text-gray-700">
+                  <span className="text-sm text-muted-foreground">
                     {session.user.name || session.user.email}
                   </span>
                 </div>
               </>
             )}
+
+            <ThemeToggle />
 
             <Button onClick={handleSignOut} size="sm">
               Sign Out

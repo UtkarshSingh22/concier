@@ -27,13 +27,15 @@ export function CallToAction() {
     <>
       {/* Full-page loading overlay */}
       {isNavigating && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/80 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
           <div className="text-center">
             <Loader2 className="h-12 w-12 animate-spin text-emerald-600 mx-auto mb-4" />
-            <p className="text-lg font-semibold text-gray-900">
+            <p className="text-lg font-semibold text-foreground">
               Loading your dashboard...
             </p>
-            <p className="text-sm text-gray-500 mt-2">Please wait a moment</p>
+            <p className="text-sm text-muted-foreground mt-2">
+              Please wait a moment
+            </p>
           </div>
         </div>
       )}
@@ -70,7 +72,7 @@ export function CallToAction() {
             </h2>
 
             {/* Subtitle */}
-            <p className="mt-8 text-xl leading-8 text-gray-300 sm:text-2xl max-w-3xl mx-auto">
+            <p className="mt-8 text-xl leading-8 text-white/80 sm:text-2xl max-w-3xl mx-auto">
               Start your free trial today and experience the difference
               professional SaaS can make.
             </p>
@@ -113,17 +115,17 @@ export function CallToAction() {
             <div className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-3 text-center">
               <div className="flex flex-col items-center">
                 <div className="text-3xl font-bold text-white mb-2">30-Day</div>
-                <div className="text-gray-300">Free Trial</div>
+                <div className="text-white/70">Free Trial</div>
               </div>
               <div className="flex flex-col items-center">
                 <div className="text-3xl font-bold text-white mb-2">
                   No Card
                 </div>
-                <div className="text-gray-300">Required</div>
+                <div className="text-white/70">Required</div>
               </div>
               <div className="flex flex-col items-center">
                 <div className="text-3xl font-bold text-white mb-2">5-Min</div>
-                <div className="text-gray-300">Setup</div>
+                <div className="text-white/70">Setup</div>
               </div>
             </div>
           </div>

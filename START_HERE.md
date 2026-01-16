@@ -75,6 +75,7 @@ Open [http://localhost:3000](http://localhost:3000)
 | Protected Routes     | ✅ Ready | [09-app-pages.md](docs/09-app-pages.md)         |
 | SEO                  | ✅ Ready | [06-seo.md](docs/06-seo.md)                     |
 | Database             | ✅ Ready | [02-database.md](docs/02-database.md)           |
+| Dark Mode            | ✅ Ready | [15-theme.md](docs/15-theme.md)                 |
 
 ## Project Structure
 
@@ -193,6 +194,7 @@ Full documentation is in the `/docs` folder:
 - [12-seeding.md](docs/12-seeding.md) - Database seeding
 - [13-environment-variables.md](docs/13-environment-variables.md) - All env vars
 - [14-error-tracking.md](docs/14-error-tracking.md) - Error tracking (optional)
+- [15-theme.md](docs/15-theme.md) - Dark mode & theming
 
 ## Deployment
 

@@ -11,6 +11,7 @@ import {
   FeatureHighlights,
   HowItWorks,
   CallToAction,
+  LandingNav,
 } from "@/components/landing";
 
 export const metadata: Metadata = createHomeMetadata({
@@ -28,7 +29,8 @@ export const metadata: Metadata = createHomeMetadata({
 
 const Home = () => {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background">
+      <LandingNav />
       <Hero />
       <ProblemSolution />
       <FeatureHighlights />
@@ -36,30 +38,30 @@ const Home = () => {
       <CallToAction />
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
+      <footer className="bg-muted border-t py-12">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
-              <p className="text-gray-400 text-sm">
+              <p className="text-muted-foreground text-sm">
                 © 2024 Your SaaS. All rights reserved.
               </p>
             </div>
             <div className="flex space-x-6">
               <Link
                 href="/contact"
-                className="text-gray-400 hover:text-white text-sm transition-colors"
+                className="text-muted-foreground hover:text-foreground text-sm transition-colors"
               >
                 Contact
               </Link>
               <Link
                 href="/privacy"
-                className="text-gray-400 hover:text-white text-sm transition-colors"
+                className="text-muted-foreground hover:text-foreground text-sm transition-colors"
               >
                 Privacy Policy
               </Link>
               <Link
                 href="/terms"
-                className="text-gray-400 hover:text-white text-sm transition-colors"
+                className="text-muted-foreground hover:text-foreground text-sm transition-colors"
               >
                 Terms of Service
               </Link>

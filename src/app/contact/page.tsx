@@ -6,6 +6,7 @@
 import type { Metadata } from "next";
 import { createStaticPageMetadata } from "@/lib/seo";
 import ContactForm from "@/components/ContactForm";
+import { LandingNav } from "@/components/landing";
 
 export const metadata: Metadata = createStaticPageMetadata(
   "Contact Us",
@@ -14,20 +15,23 @@ export const metadata: Metadata = createStaticPageMetadata(
 
 const ContactPage = () => {
   return (
-    <div className="bg-white py-16 sm:py-24">
-      <div className="mx-auto max-w-2xl px-6 lg:px-8">
-        <div className="mx-auto max-w-xl text-center">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            Contact Us
-          </h1>
-          <p className="mt-4 text-lg leading-8 text-gray-600">
-            Have a question or need help? We&apos;d love to hear from you. Send
-            us a message and we&apos;ll respond as soon as possible.
-          </p>
-        </div>
+    <div className="bg-background min-h-screen">
+      <LandingNav />
+      <div className="pt-24 pb-16 sm:pt-32 sm:pb-24">
+        <div className="mx-auto max-w-2xl px-6 lg:px-8">
+          <div className="mx-auto max-w-xl text-center">
+            <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              Contact Us
+            </h1>
+            <p className="mt-4 text-lg leading-8 text-muted-foreground">
+              Have a question or need help? We&apos;d love to hear from you.
+              Send us a message and we&apos;ll respond as soon as possible.
+            </p>
+          </div>
 
-        <div className="mt-12">
-          <ContactForm />
+          <div className="mt-12">
+            <ContactForm />
+          </div>
         </div>
       </div>
     </div>

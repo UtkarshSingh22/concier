@@ -71,7 +71,7 @@ export default function ProductPageClient() {
   if (status === "loading") {
     return (
       <div className="flex items-center justify-center p-8">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-foreground"></div>
       </div>
     );
   }
@@ -80,56 +80,62 @@ export default function ProductPageClient() {
   if (!user) {
     return (
       <div className="text-center p-8">
-        <p className="text-gray-600">Unable to load user information.</p>
+        <p className="text-muted-foreground">
+          Unable to load user information.
+        </p>
       </div>
     );
   }
 
   return (
     <>
-      <h1 className="text-2xl font-bold text-gray-900 mb-4">Dashboard</h1>
-      <p className="text-gray-600 mb-6">
+      <h1 className="text-2xl font-bold text-card-foreground mb-4">
+        Dashboard
+      </h1>
+      <p className="text-muted-foreground mb-6">
         Welcome to your SaaS! This is your protected product area. Start
         building your features here.
       </p>
 
-      <div className="bg-gray-50 p-4 rounded-lg mb-6">
-        <h3 className="text-sm font-medium text-gray-500 mb-2">
+      <div className="bg-muted/50 p-4 rounded-lg mb-6">
+        <h3 className="text-sm font-medium text-muted-foreground mb-2">
           Account Information
         </h3>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <p className="text-sm text-gray-500">Email</p>
-            <p className="font-medium text-gray-900">{user.email}</p>
+            <p className="text-sm text-muted-foreground">Email</p>
+            <p className="font-medium text-card-foreground">{user.email}</p>
           </div>
           <div>
-            <p className="text-sm text-gray-500">Name</p>
-            <p className="font-medium text-gray-900">{user.name || "N/A"}</p>
+            <p className="text-sm text-muted-foreground">Name</p>
+            <p className="font-medium text-card-foreground">
+              {user.name || "N/A"}
+            </p>
           </div>
         </div>
       </div>
 
-      <div className="bg-green-50 p-4 rounded-lg mb-6">
-        <h3 className="text-sm font-medium text-green-800 mb-2">
+      <div className="bg-green-50 dark:bg-green-950 p-4 rounded-lg mb-6 border border-green-200 dark:border-green-800">
+        <h3 className="text-sm font-medium text-green-800 dark:text-green-200 mb-2">
           📧 Test Email System
         </h3>
-        <p className="text-sm text-green-700 mb-3">
+        <p className="text-sm text-green-700 dark:text-green-300 mb-3">
           Send yourself a welcome email to test the email system.
         </p>
         <Button
           onClick={handleSendWelcomeEmail}
           disabled={isSendingEmail}
-          className="bg-green-600 hover:bg-green-700"
+          className="bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600"
         >
           {isSendingEmail ? "Sending..." : "Send Welcome Email"}
         </Button>
       </div>
 
-      <div className="bg-blue-50 p-4 rounded-lg">
-        <h3 className="text-sm font-medium text-blue-800 mb-2">
+      <div className="bg-blue-50 dark:bg-blue-950 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
+        <h3 className="text-sm font-medium text-blue-800 dark:text-blue-200 mb-2">
           🚀 Build Your Product
         </h3>
-        <p className="text-sm text-blue-700">
+        <p className="text-sm text-blue-700 dark:text-blue-300">
           This is where you implement your SaaS features. Add your dashboard,
           API routes, and UI components in the /product directory.
         </p>

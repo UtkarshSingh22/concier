@@ -119,7 +119,9 @@ const ContactForm = () => {
                 disabled={isSubmitting}
               />
               {errors.name && (
-                <p className="text-sm text-red-600">{errors.name}</p>
+                <p className="text-sm text-red-600 dark:text-red-400">
+                  {errors.name}
+                </p>
               )}
             </div>
 
@@ -136,7 +138,9 @@ const ContactForm = () => {
                 disabled={isSubmitting}
               />
               {errors.email && (
-                <p className="text-sm text-red-600">{errors.email}</p>
+                <p className="text-sm text-red-600 dark:text-red-400">
+                  {errors.email}
+                </p>
               )}
             </div>
           </div>
@@ -153,7 +157,9 @@ const ContactForm = () => {
               disabled={isSubmitting}
             />
             {errors.message && (
-              <p className="text-sm text-red-600">{errors.message}</p>
+              <p className="text-sm text-red-600 dark:text-red-400">
+                {errors.message}
+              </p>
             )}
           </div>
 

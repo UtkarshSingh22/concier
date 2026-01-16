@@ -143,16 +143,16 @@ const BillingPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-background">
         <Header />
         <main className="max-w-4xl mx-auto py-6 sm:px-6 lg:px-8">
           <div className="px-4 py-6 sm:px-0">
             <div className="animate-pulse">
-              <div className="h-8 bg-gray-200 rounded w-1/4 mb-4"></div>
-              <div className="h-4 bg-gray-200 rounded w-1/2 mb-8"></div>
+              <div className="h-8 bg-muted rounded w-1/4 mb-4"></div>
+              <div className="h-4 bg-muted rounded w-1/2 mb-8"></div>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div className="h-64 bg-gray-200 rounded"></div>
-                <div className="h-64 bg-gray-200 rounded"></div>
+                <div className="h-64 bg-muted rounded"></div>
+                <div className="h-64 bg-muted rounded"></div>
               </div>
             </div>
           </div>
@@ -162,23 +162,23 @@ const BillingPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Header />
       <main className="max-w-4xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           <div className="mb-8">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">
+                <h1 className="text-3xl font-bold text-foreground">
                   Billing & Subscription
                 </h1>
-                <p className="mt-2 text-gray-600">
+                <p className="mt-2 text-muted-foreground">
                   Manage your subscription and billing information.
                 </p>
               </div>
               {refreshing ? (
-                <div className="flex items-center space-x-2 text-sm text-blue-600">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                <div className="flex items-center space-x-2 text-sm text-blue-600 dark:text-blue-400">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 dark:border-blue-400"></div>
                   <span>Updating subscription data...</span>
                 </div>
               ) : (
@@ -222,7 +222,7 @@ const BillingPage = () => {
               <CardContent>
                 <div className="space-y-4">
                   {subscription && (
-                    <div className="text-sm text-gray-600">
+                    <div className="text-sm text-muted-foreground">
                       <div className="flex justify-between">
                         <span>Status:</span>
                         <span className="capitalize">
@@ -240,7 +240,7 @@ const BillingPage = () => {
                         </div>
                       )}
                       {subscription.cancelAtPeriodEnd && (
-                        <div className="mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded text-yellow-800 text-xs">
+                        <div className="mt-2 p-2 bg-yellow-50 dark:bg-yellow-950 border border-yellow-200 dark:border-yellow-800 rounded text-yellow-800 dark:text-yellow-200 text-xs">
                           Your subscription will cancel at the end of the
                           current billing period.
                         </div>
@@ -249,14 +249,16 @@ const BillingPage = () => {
                   )}
 
                   <div className="pt-4 border-t">
-                    <h4 className="font-medium mb-2">Your Features:</h4>
+                    <h4 className="font-medium mb-2 text-card-foreground">
+                      Your Features:
+                    </h4>
                     <ul className="space-y-1">
                       {entitlements.map((entitlement) => (
                         <li
                           key={entitlement.id}
-                          className="flex items-center text-sm text-gray-600"
+                          className="flex items-center text-sm text-muted-foreground"
                         >
-                          <Check className="h-4 w-4 text-green-500 mr-2" />
+                          <Check className="h-4 w-4 text-green-500 dark:text-green-400 mr-2" />
                           {entitlement.displayName}
                         </li>
                       ))}
@@ -277,12 +279,14 @@ const BillingPage = () => {
               <CardContent>
                 <div className="space-y-4">
                   {isFree && (
-                    <div className="p-4 border border-blue-200 rounded-lg bg-blue-50">
+                    <div className="p-4 border border-blue-200 dark:border-blue-800 rounded-lg bg-blue-50 dark:bg-blue-950">
                       <div className="flex items-center justify-between mb-2">
-                        <h3 className="font-medium text-blue-900">Pro Plan</h3>
+                        <h3 className="font-medium text-blue-900 dark:text-blue-100">
+                          Pro Plan
+                        </h3>
                         <Badge variant="outline">$29/month</Badge>
                       </div>
-                      <p className="text-sm text-blue-700 mb-3">
+                      <p className="text-sm text-blue-700 dark:text-blue-300 mb-3">
                         Advanced features for growing businesses.
                       </p>
                       <UpgradeButton planName="pro" className="w-full">
@@ -292,14 +296,14 @@ const BillingPage = () => {
                   )}
 
                   {isPro && (
-                    <div className="p-4 border border-green-200 rounded-lg bg-green-50">
+                    <div className="p-4 border border-green-200 dark:border-green-800 rounded-lg bg-green-50 dark:bg-green-950">
                       <div className="flex items-center justify-between mb-2">
-                        <h3 className="font-medium text-green-900">
+                        <h3 className="font-medium text-green-900 dark:text-green-100">
                           Pro Plan Active
                         </h3>
                         <Badge variant="default">Current</Badge>
                       </div>
-                      <p className="text-sm text-green-700 mb-3">
+                      <p className="text-sm text-green-700 dark:text-green-300 mb-3">
                         You&apos;re enjoying all Pro features!
                       </p>
                       <div className="space-y-2">
@@ -309,7 +313,7 @@ const BillingPage = () => {
                         {!subscription?.cancelAtPeriodEnd && (
                           <Button
                             variant="outline"
-                            className="w-full text-red-600 hover:text-red-700"
+                            className="w-full text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
                           >
                             Cancel Subscription
                           </Button>
@@ -318,7 +322,7 @@ const BillingPage = () => {
                     </div>
                   )}
 
-                  <div className="text-xs text-gray-500 mt-4">
+                  <div className="text-xs text-muted-foreground mt-4">
                     Need help? Contact our support team.
                   </div>
                 </div>

@@ -8,6 +8,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { authOptions } from "@/lib/auth";
 import AuthForm from "@/components/AuthForm";
+import { LandingNav } from "@/components/landing";
 
 const AuthPage = async () => {
   const session = await getServerSession(authOptions);
@@ -17,18 +18,21 @@ const AuthPage = async () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4 py-12">
-      <div className="w-full max-w-md">
-        <div className="mb-8">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to Home
-          </Link>
+    <div className="min-h-screen bg-background">
+      <LandingNav />
+      <div className="flex items-center justify-center px-4 py-12 pt-24">
+        <div className="w-full max-w-md">
+          <div className="mb-8">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back to Home
+            </Link>
+          </div>
+          <AuthForm />
         </div>
-        <AuthForm />
       </div>
     </div>
   );

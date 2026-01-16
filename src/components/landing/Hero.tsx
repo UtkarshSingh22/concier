@@ -27,20 +27,22 @@ export function Hero() {
     <>
       {/* Full-page loading overlay */}
       {isNavigating && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/80 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
           <div className="text-center">
             <Loader2 className="h-12 w-12 animate-spin text-emerald-600 mx-auto mb-4" />
-            <p className="text-lg font-semibold text-gray-900">
+            <p className="text-lg font-semibold text-foreground">
               Loading your dashboard...
             </p>
-            <p className="text-sm text-gray-500 mt-2">Please wait a moment</p>
+            <p className="text-sm text-muted-foreground mt-2">
+              Please wait a moment
+            </p>
           </div>
         </div>
       )}
 
-      <section className="relative min-h-screen flex items-center bg-gradient-to-br from-slate-50 via-white to-indigo-50/40 overflow-hidden">
+      <section className="relative min-h-screen flex items-center bg-background overflow-hidden">
         {/* Animated background grid */}
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22 width=%2232%22 height=%2232%22 fill=%22none%22 stroke=%22rgb(148 163 184 / 0.1)%22%3E%3Cpath d=%22m0 .5 32 0%22/%3E%3Cpath d=%22m0 32.5 32 0%22/%3E%3Cpath d=%22m.5 0 0 32%22/%3E%3Cpath d=%22m32.5 0 0 32%22/%3E%3C/svg%3E')] opacity-40"></div>
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22 width=%2232%22 height=%2232%22 fill=%22none%22 stroke=%22rgb(148 163 184 / 0.1)%22%3E%3Cpath d=%22m0 .5 32 0%22/%3E%3Cpath d=%22m0 32.5 32 0%22/%3E%3Cpath d=%22m.5 0 0 32%22/%3E%3Cpath d=%22m32.5 0 0 32%22/%3E%3C/svg%3E')] opacity-40 dark:opacity-20"></div>
 
         {/* Floating decorative elements */}
         <div className="absolute inset-0 overflow-hidden">
@@ -61,23 +63,23 @@ export function Hero() {
         <div className="relative mx-auto max-w-7xl px-6 lg:px-8 py-24">
           <div className="mx-auto max-w-4xl text-center">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-100 to-teal-100 px-4 py-2 text-sm font-medium text-emerald-700 mb-8">
+            <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-100 to-teal-100 dark:from-emerald-900/50 dark:to-teal-900/50 px-4 py-2 text-sm font-medium text-emerald-700 dark:text-emerald-300 mb-8 border border-emerald-200/50 dark:border-emerald-700/50">
               <Sparkles className="h-4 w-4" />
               Professional SaaS Platform
             </div>
 
             {/* Main headline */}
-            <h1 className="text-6xl font-bold tracking-tight text-gray-900 sm:text-8xl lg:text-9xl xl:text-[10rem] leading-none">
-              <span className="block bg-gradient-to-r from-gray-900 via-emerald-800 to-teal-800 bg-clip-text text-transparent">
+            <h1 className="text-6xl font-bold tracking-tight text-foreground sm:text-8xl lg:text-9xl xl:text-[10rem] leading-none">
+              <span className="block bg-gradient-to-r from-foreground via-emerald-800 to-teal-800 dark:from-foreground dark:via-emerald-400 dark:to-teal-400 bg-clip-text text-transparent">
                 Your
               </span>
-              <span className="block bg-gradient-to-r from-emerald-600 via-teal-600 to-green-600 bg-clip-text text-transparent">
+              <span className="block bg-gradient-to-r from-emerald-600 via-teal-600 to-green-600 dark:from-emerald-400 dark:via-teal-400 dark:to-green-400 bg-clip-text text-transparent">
                 SaaS
               </span>
             </h1>
 
             {/* Subtitle */}
-            <p className="mt-8 text-xl leading-8 text-gray-600 sm:text-2xl lg:text-3xl font-medium max-w-3xl mx-auto">
+            <p className="mt-8 text-xl leading-8 text-muted-foreground sm:text-2xl lg:text-3xl font-medium max-w-3xl mx-auto">
               Streamline your workflow with our professional SaaS platform
               designed for modern teams.
             </p>
@@ -110,14 +112,14 @@ export function Hero() {
                   router.push("/pricing");
                 }}
                 disabled={isNavigating}
-                className="w-full border-3 border-gray-300/80 bg-white/80 backdrop-blur-sm px-12 py-5 text-xl font-bold text-gray-700 hover:border-emerald-300 hover:bg-emerald-50/80 hover:shadow-xl transition-all duration-200 sm:w-auto rounded-xl disabled:opacity-50"
+                className="w-full border-3 backdrop-blur-sm px-12 py-5 text-xl font-bold hover:border-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-950 hover:shadow-xl transition-all duration-200 sm:w-auto rounded-xl disabled:opacity-50"
               >
                 View Pricing
               </Button>
             </div>
 
             {/* Social proof hint */}
-            <div className="mt-16 flex items-center justify-center gap-8 text-sm text-gray-500">
+            <div className="mt-16 flex items-center justify-center gap-8 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <div className="flex -space-x-1">
                   <div className="h-6 w-6 rounded-full bg-gradient-to-r from-indigo-400 to-purple-400"></div>
@@ -131,7 +133,7 @@ export function Hero() {
         </div>
 
         {/* Bottom gradient fade */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent"></div>
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent"></div>
       </section>
     </>
   );

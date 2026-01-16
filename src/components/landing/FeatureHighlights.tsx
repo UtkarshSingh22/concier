@@ -42,26 +42,26 @@ const features = [
 
 export function FeatureHighlights() {
   return (
-    <section className="relative bg-gradient-to-br from-slate-50 via-gray-50 to-emerald-50/30 py-24 sm:py-32 overflow-hidden">
+    <section className="relative bg-muted/30 py-24 sm:py-32 overflow-hidden">
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 right-1/4 h-64 w-64 rounded-full bg-gradient-to-br from-emerald-200/20 to-teal-200/20 blur-3xl"></div>
-        <div className="absolute bottom-1/4 left-1/4 h-48 w-48 rounded-full bg-gradient-to-br from-teal-200/20 to-green-200/20 blur-2xl"></div>
+        <div className="absolute top-1/4 right-1/4 h-64 w-64 rounded-full bg-gradient-to-br from-emerald-200/20 to-teal-200/20 dark:from-emerald-400/10 dark:to-teal-400/10 blur-3xl"></div>
+        <div className="absolute bottom-1/4 left-1/4 h-48 w-48 rounded-full bg-gradient-to-br from-teal-200/20 to-green-200/20 dark:from-teal-400/10 dark:to-green-400/10 blur-2xl"></div>
       </div>
 
       <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
-          <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-100 to-purple-100 px-4 py-2 text-sm font-medium text-indigo-700 mb-6">
+          <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-100 to-purple-100 dark:from-indigo-900/50 dark:to-purple-900/50 px-4 py-2 text-sm font-medium text-indigo-700 dark:text-indigo-300 mb-6 border border-indigo-200/50 dark:border-indigo-700/50">
             <Zap className="h-4 w-4" />
             Powerful Features
           </div>
-          <h2 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
+          <h2 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
             Everything you need to{" "}
-            <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-400 dark:to-teal-400 bg-clip-text text-transparent">
               succeed
             </span>
           </h2>
-          <p className="mt-6 text-xl leading-8 text-gray-600 max-w-2xl mx-auto">
+          <p className="mt-6 text-xl leading-8 text-muted-foreground max-w-2xl mx-auto">
             Powerful features designed to streamline your workflow and boost
             team productivity.
           </p>
@@ -72,16 +72,16 @@ export function FeatureHighlights() {
             {features.map((feature, index) => (
               <Card
                 key={feature.name}
-                className={`group relative overflow-hidden border-0 bg-gradient-to-br ${feature.bgGradient} shadow-xl transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 hover:rotate-1`}
+                className="group relative overflow-hidden shadow-xl transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 hover:rotate-1 bg-card"
               >
                 {/* Animated background glow */}
                 <div
-                  className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 transition-opacity duration-500 group-hover:opacity-3`}
+                  className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 transition-opacity duration-500 group-hover:opacity-5 dark:group-hover:opacity-10`}
                 ></div>
 
                 {/* Decorative corner accent */}
                 <div
-                  className={`absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl ${feature.gradient} opacity-10 rounded-bl-3xl`}
+                  className={`absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl ${feature.gradient} opacity-10 dark:opacity-20 rounded-bl-3xl`}
                 ></div>
 
                 <CardHeader className="relative pb-6">
@@ -91,14 +91,14 @@ export function FeatureHighlights() {
                     >
                       <feature.icon className="h-8 w-8 text-white" />
                     </div>
-                    <CardTitle className="text-2xl font-bold text-gray-900 group-hover:text-gray-800 transition-colors">
+                    <CardTitle className="text-2xl font-bold text-card-foreground transition-colors">
                       {feature.name}
                     </CardTitle>
                   </div>
                 </CardHeader>
 
                 <CardContent className="relative">
-                  <p className="text-gray-700 leading-relaxed text-lg">
+                  <p className="text-muted-foreground leading-relaxed text-lg">
                     {feature.description}
                   </p>
 
