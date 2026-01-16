@@ -107,7 +107,7 @@ const PricingPage = () => {
           </div>
         </div>
 
-        <div className="mx-auto max-w-4xl text-center">
+        <div className="mx-auto max-w-3xl text-center">
           <h1 className="text-6xl font-bold tracking-tight text-gray-900 sm:text-7xl lg:text-8xl">
             Choose Your{" "}
             <span className="bg-gradient-to-r from-emerald-600 via-teal-600 to-green-600 bg-clip-text text-transparent">
@@ -125,7 +125,7 @@ const PricingPage = () => {
             {plans.map((plan, index) => (
               <div
                 key={plan.name}
-                className={`relative ${plan.popular ? "mt-12" : ""}`}
+                className={`relative ${plan.popular ? "mt-6" : ""}`}
               >
                 <Card
                   className={`group relative transition-all duration-500 hover:shadow-3xl hover:-translate-y-4 ${

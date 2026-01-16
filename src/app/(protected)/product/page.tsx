@@ -4,18 +4,15 @@
 
 import type { Metadata } from "next";
 import { createStaticPageMetadata } from "@/lib/seo";
-import { requireAuth } from "@/lib/auth-utils";
+import Header from "@/components/Header";
+import ProductPageClient from "@/components/ProductPageClient";
 
 export const metadata: Metadata = createStaticPageMetadata(
   "Dashboard",
   "Welcome to your SaaS dashboard. Access premium features and manage your account."
 );
-import Header from "@/components/Header";
-import ProductPageClient from "../../components/ProductPageClient";
 
 export default async function ProductPage() {
-  const user = await requireAuth(); // Protected route - redirects to /auth if not logged in
-
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
@@ -23,7 +20,7 @@ export default async function ProductPage() {
         <div className="px-4 py-6 sm:px-0">
           <div className="bg-white overflow-hidden shadow rounded-lg">
             <div className="px-4 py-5 sm:p-6">
-              <ProductPageClient user={user} />
+              <ProductPageClient />
             </div>
           </div>
         </div>

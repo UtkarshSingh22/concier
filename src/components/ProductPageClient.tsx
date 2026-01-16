@@ -3,23 +3,23 @@
 "use client";
 
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
-interface User {
-  id: string;
-  email: string;
-  name?: string | null;
-}
-
-interface ProductPageClientProps {
-  user: User;
-}
-
-export default function ProductPageClient({ user }: ProductPageClientProps) {
+export default function ProductPageClient() {
+  const { data: session, status } = useSession();
   const [isSendingEmail, setIsSendingEmail] = useState(false);
 
+  // Get user from session
+  const user = session?.user;
+
   const handleSendWelcomeEmail = async () => {
+    if (!user?.email) {
+      toast.error("User email not found");
+      return;
+    }
+
     try {
       setIsSendingEmail(true);
 
@@ -63,6 +63,24 @@ export default function ProductPageClient({ user }: ProductPageClientProps) {
       setIsSendingEmail(false);
     }
   };
+
+  // Show loading state while session is loading
+  if (status === "loading") {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
+
+  // If no user, show message (shouldn't happen due to protected route)
+  if (!user) {
+    return (
+      <div className="text-center p-8">
+        <p className="text-gray-600">Unable to load user information.</p>
+      </div>
+    );
+  }
 
   return (
     <>
