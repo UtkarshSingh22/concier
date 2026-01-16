@@ -209,7 +209,7 @@ export function createHomeMetadata(
   overrides: Partial<SEOConfig> = {}
 ): Metadata {
   return generateMetadata({
-    title: seoDefaults.title.default,
+    // Don't pass title for homepage - it should use the default without template
     description: seoDefaults.description,
     ...overrides,
   });
