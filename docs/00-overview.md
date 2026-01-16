@@ -99,3 +99,4 @@ The boilerplate handles authentication, billing, and infrastructure. You focus o
 | [11-deployment.md](11-deployment.md)                       | Production deployment               |
 | [12-seeding.md](12-seeding.md)                             | Database seeding                    |
 | [13-environment-variables.md](13-environment-variables.md) | All environment variables           |
+| [14-error-tracking.md](14-error-tracking.md)               | Sentry error tracking (optional)    |

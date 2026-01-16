@@ -6,61 +6,64 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { createCheckoutSession, getStripePriceId } from "@/lib/stripe";
+import { withErrorHandler, createErrorResponse } from "@/lib/error-handler";
 
 export async function POST(request: NextRequest) {
-  try {
-    // Get authenticated user
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  return withErrorHandler(
+    async () => {
+      // Get authenticated user
+      const session = await getServerSession(authOptions);
+      if (!session?.user?.email) {
+        return createErrorResponse("Unauthorized", 401, "AUTH_REQUIRED");
+      }
+
+      // Parse request body
+      const { planName } = await request.json();
+      if (!planName || typeof planName !== "string") {
+        return createErrorResponse(
+          "Plan name is required",
+          400,
+          "VALIDATION_ERROR"
+        );
+      }
+
+      // Get Stripe price ID for the plan
+      const priceId = await getStripePriceId(planName);
+      if (!priceId) {
+        return createErrorResponse(
+          "Plan not found or not configured",
+          404,
+          "PLAN_NOT_FOUND"
+        );
+      }
+
+      // Get user ID from database
+      const { db } = await import("@/lib/db");
+      const user = await db.user.findUnique({
+        where: { email: session.user.email },
+      });
+
+      if (!user) {
+        return createErrorResponse("User not found", 404, "USER_NOT_FOUND");
+      }
+
+      // Create checkout session
+      const checkoutSession = await createCheckoutSession({
+        priceId,
+        userId: user.id,
+        userEmail: session.user.email,
+        successUrl: `${process.env.NEXTAUTH_URL}/billing?success=true`,
+        cancelUrl: `${process.env.NEXTAUTH_URL}/billing?canceled=true`,
+      });
+
+      return NextResponse.json({
+        url: checkoutSession.url,
+        sessionId: checkoutSession.id,
+      });
+    },
+    {
+      context: "stripe-checkout",
+      tags: { type: "payment" },
     }
-
-    // Parse request body
-    const { planName } = await request.json();
-    if (!planName || typeof planName !== "string") {
-      return NextResponse.json(
-        { error: "Plan name is required" },
-        { status: 400 }
-      );
-    }
-
-    // Get Stripe price ID for the plan
-    const priceId = await getStripePriceId(planName);
-    if (!priceId) {
-      return NextResponse.json(
-        { error: "Plan not found or not configured" },
-        { status: 404 }
-      );
-    }
-
-    // Get user ID from database
-    const { db } = await import("@/lib/db");
-    const user = await db.user.findUnique({
-      where: { email: session.user.email },
-    });
-
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
-
-    // Create checkout session
-    const checkoutSession = await createCheckoutSession({
-      priceId,
-      userId: user.id,
-      userEmail: session.user.email,
-      successUrl: `${process.env.NEXTAUTH_URL}/billing?success=true`,
-      cancelUrl: `${process.env.NEXTAUTH_URL}/billing?canceled=true`,
-    });
-
-    return NextResponse.json({
-      url: checkoutSession.url,
-      sessionId: checkoutSession.id,
-    });
-  } catch (error) {
-    console.error("Checkout session creation error:", error);
-    return NextResponse.json(
-      { error: "Failed to create checkout session" },
-      { status: 500 }
-    );
-  }
+  );
 }

@@ -4,6 +4,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { EmailService } from "@/lib/email";
+import { logger } from "@/lib/logger";
 
 // Simple in-memory rate limiting (production should use Redis/external service)
 const rateLimit = new Map<string, { count: number; resetTime: number }>();
@@ -124,8 +125,8 @@ export async function POST(request: NextRequest) {
 
     // Get admin email (use EMAIL_FROM or fallback)
     const adminEmail =
-      process.env.EMAIL_FROM ||
       process.env.SUPPORT_EMAIL ||
+      process.env.EMAIL_FROM ||
       "admin@yoursaas.com";
 
     // Send email using existing email system
@@ -138,7 +139,14 @@ export async function POST(request: NextRequest) {
     });
 
     if (!emailResult.success) {
-      console.error("Failed to send contact email:", emailResult.error);
+      logger.error("Failed to send contact email", {
+        context: "contact-form",
+        metadata: {
+          error: emailResult.error,
+          fromEmail: sanitizedData.email,
+        },
+      });
+      
       return NextResponse.json(
         {
           success: false,
@@ -156,7 +164,11 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("Contact form error:", error);
+    logger.error(error as Error, {
+      context: "contact-form",
+      tags: { type: "unexpected_error" },
+    });
+    
     return NextResponse.json(
       {
         success: false,

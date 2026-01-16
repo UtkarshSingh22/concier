@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { db } from "@/lib/db";
 import crypto from "crypto";
+import { logger } from "@/lib/logger";
 
 export async function POST(request: NextRequest) {
   try {
@@ -85,7 +86,11 @@ export async function POST(request: NextRequest) {
       message: "Magic link sent successfully",
     });
   } catch (error) {
-    console.error("Magic link error:", error);
+    logger.error(error as Error, {
+      context: "magic-link",
+      tags: { auth_method: "magic_link" },
+    });
+
     return NextResponse.json(
       { error: "Failed to send magic link" },
       { status: 500 }

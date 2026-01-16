@@ -192,6 +192,7 @@ Full documentation is in the `/docs` folder:
 - [11-deployment.md](docs/11-deployment.md) - Production deployment
 - [12-seeding.md](docs/12-seeding.md) - Database seeding
 - [13-environment-variables.md](docs/13-environment-variables.md) - All env vars
+- [14-error-tracking.md](docs/14-error-tracking.md) - Error tracking (optional)
 
 ## Deployment
 
@@ -211,6 +212,7 @@ See [11-deployment.md](docs/11-deployment.md) for detailed instructions.
 - **Payments**: Stripe
 - **Email**: Resend
 - **Styling**: Tailwind CSS + shadcn/ui
+- **Error Tracking**: Sentry (optional)
 
 ## Support
 

@@ -69,6 +69,20 @@ These have defaults or fallbacks:
 
 Used in: `/lib/email.ts`, `/api/contact/route.ts`, `/api/auth/magic-link/`
 
+### Error Tracking (Optional)
+
+| Variable                 | Description            | Example                       |
+| ------------------------ | ---------------------- | ----------------------------- |
+| `SENTRY_DSN`             | Sentry server-side DSN | `https://xxx@sentry.io/xxx`   |
+| `SENTRY_ENVIRONMENT`     | Environment name       | `development` or `production` |
+| `NEXT_PUBLIC_SENTRY_DSN` | Sentry client-side DSN | `https://xxx@sentry.io/xxx`   |
+
+**Note:** Sentry is optional. If not configured, the app works normally without error tracking.
+
+Used in: `sentry.*.config.ts`, error boundaries, API routes
+
+See [14-error-tracking.md](14-error-tracking.md) for setup instructions.
+
 ## Environment File Template
 
 Create `.env` file with these values:
@@ -106,6 +120,16 @@ EMAIL_FROM=noreply@yourdomain.com
 # APP URL
 # ===================
 NEXT_PUBLIC_APP_URL=http://localhost:3000
+
+# ===================
+# ERROR TRACKING (Optional - Sentry)
+# ===================
+# Server-side error tracking
+SENTRY_DSN=https://1234567890abcdef1234567890abcdef@o123456.ingest.sentry.io/1234567
+SENTRY_ENVIRONMENT=development
+
+# Client-side error tracking
+NEXT_PUBLIC_SENTRY_DSN=https://1234567890abcdef1234567890abcdef@o123456.ingest.sentry.io/1234567
 ```
 
 ## Getting API Keys
