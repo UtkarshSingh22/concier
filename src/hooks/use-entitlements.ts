@@ -4,7 +4,7 @@
 // Do not modify - this ensures consistent entitlement checking across the app.
 
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 interface Entitlement {
   id: string;
@@ -17,6 +17,7 @@ export function useEntitlements() {
   const { data: session, status } = useSession();
   const [entitlements, setEntitlements] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
+  const lastFetchRef = useRef<string | null>(null);
 
   useEffect(() => {
     async function checkEntitlements() {
@@ -25,6 +26,13 @@ export function useEntitlements() {
         setLoading(false);
         return;
       }
+
+      // Prevent duplicate fetches for the same user
+      const userId = session.user.email;
+      if (lastFetchRef.current === userId) {
+        return;
+      }
+      lastFetchRef.current = userId;
 
       try {
         // Fetch user entitlements from API

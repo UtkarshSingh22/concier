@@ -17,7 +17,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Check, Crown, Zap } from "lucide-react";
 import { StatusMessages } from "@/components/StatusMessages";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 
 // Define types for subscription data
@@ -48,8 +48,9 @@ const BillingPage = () => {
   const [entitlements, setEntitlements] = useState<EntitlementData[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const hasFetchedRef = useRef(false);
 
-  const fetchData = async (isRefresh = false) => {
+  const fetchData = useCallback(async (isRefresh = false) => {
     if (isRefresh) {
       setRefreshing(true);
     }
@@ -77,9 +78,15 @@ const BillingPage = () => {
         setRefreshing(false);
       }
     }
-  };
+  }, []);
 
   useEffect(() => {
+    // Prevent duplicate API calls in React StrictMode or on re-renders
+    if (hasFetchedRef.current) {
+      return;
+    }
+    hasFetchedRef.current = true;
+
     const success = searchParams.get("success");
 
     if (success === "true") {
@@ -93,7 +100,7 @@ const BillingPage = () => {
       // Normal loading without delay
       fetchData();
     }
-  }, []);
+  }, [searchParams, fetchData]);
 
   const isPro = subscription?.plan?.name === "pro";
   const isFree = !subscription || subscription.plan?.name === "free";
