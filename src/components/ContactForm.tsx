@@ -1,6 +1,7 @@
 // 🏗️ USER EDITABLE - CONTACT FORM COMPONENT
-// Customize the contact form fields, validation, and styling.
-// This component is fully editable and handles form submission.
+// Customize form fields, validation messages, and styling.
+// Safe to edit: Field labels, styling, validation rules.
+// The form submits to /api/contact which handles email sending.
 
 "use client";
 

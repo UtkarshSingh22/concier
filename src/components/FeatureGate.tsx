@@ -1,6 +1,7 @@
 // 🏗️ USER EDITABLE - FEATURE GATE COMPONENT
-// Customize how features are gated behind entitlements.
-// This component is fully editable - modify behavior, styling, or add new features.
+// Customize loading states, locked UI, and styling.
+// Safe to edit: UI/UX, fallback content, styling.
+// Keep the entitlement checking logic intact.
 
 "use client";
 

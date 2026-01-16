@@ -73,20 +73,25 @@ export interface SEODefaults {
 /**
  * Default SEO configuration - customize these values for your application
  */
+/**
+ * Default SEO configuration - customize these values for your application
+ *
+ * @customize Change siteName, description, and social handles to match your brand
+ */
 export const seoDefaults: SEODefaults = {
-  siteName: "SaaS Boilerplate",
+  siteName: "Your SaaS",
   title: {
-    default: "SaaS Boilerplate",
-    template: "%s | SaaS Boilerplate",
+    default: "Your SaaS",
+    template: "%s | Your SaaS",
   },
   description:
-    "Production-ready SaaS boilerplate with authentication, billing, and payments.",
+    "Streamline your workflow with our professional SaaS platform designed for modern teams.",
   url: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
   ogImage: {
-    url: "/og-image.jpg", // Add this image to your public folder
+    url: "/og-image.jpg", // Add this image to your public folder (1200x630px recommended)
     width: 1200,
     height: 630,
-    alt: "SaaS Boilerplate",
+    alt: "Your SaaS",
   },
   twitter: {
     handle: "@yourhandle", // Replace with your Twitter handle

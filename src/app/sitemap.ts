@@ -6,7 +6,13 @@ const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
  * Static routes that should be included in the sitemap
  * Add new public routes here as your application grows
  */
-const staticRoutes = ["", "/pricing"] as const;
+const staticRoutes = [
+  "",
+  "/pricing",
+  "/contact",
+  "/privacy",
+  "/terms",
+] as const;
 
 /**
  * Generate sitemap for public pages only

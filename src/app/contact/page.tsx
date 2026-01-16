@@ -1,6 +1,7 @@
 // 🏗️ USER EDITABLE - CONTACT PAGE
-// Customize the contact form design and messaging.
-// This page is fully editable - modify form fields and styling as needed.
+// Customize the page layout, heading, and description.
+// Safe to edit: Heading text, description, styling.
+// The ContactForm component handles the actual form.
 
 import type { Metadata } from "next";
 import { createStaticPageMetadata } from "@/lib/seo";

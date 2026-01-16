@@ -1,6 +1,7 @@
 // 🔒 CORE SYSTEM - DO NOT MODIFY
 // Client-side hook for checking user entitlements.
-// Provides real-time entitlement checking for UI components.
+// Used by FeatureGate and other components to check access rights.
+// Do not modify - this ensures consistent entitlement checking across the app.
 
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";

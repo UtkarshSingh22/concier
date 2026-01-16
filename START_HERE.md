@@ -1,237 +1,221 @@
-# 🚀 Swift Deploy - Get Your Saas Live in 10 Minutes
+# Your SaaS Boilerplate
 
-**Deploy your SaaS application in minutes with authentication, payments, and modern UI.**
+A production-ready Next.js 14 SaaS boilerplate with authentication, billing, and payments.
 
-## ⚡ Quick Start
+## Quick Start (10 minutes)
 
-### 1. Environment Setup (2 minutes)
+### 1. Environment Setup
 
 ```bash
 cp .env.example .env
-# Edit .env and add your API keys:
-# - AUTH_SECRET (generate random string)
-# - GOOGLE_CLIENT_ID & GOOGLE_CLIENT_SECRET (from Google OAuth - add redirect URI: https://yourdomain.com/api/auth/callback/google)
-# - DATABASE_URL (your PostgreSQL connection string)
-# - STRIPE_SECRET_KEY & STRIPE_WEBHOOK_SECRET (from Stripe dashboard)
-# - RESEND_API_KEY (from Resend for email)
-# - EMAIL_FROM (your verified sender email, optional)
 ```
 
-**Note**: This project requires Node.js 20.9.0+.
+Edit `.env` and add your API keys:
 
-### 2. Install & Setup Database (3 minutes)
+- `DATABASE_URL` - Your PostgreSQL connection string
+- `AUTH_SECRET` - Generate a random 32+ character string
+- `NEXTAUTH_URL` - Your app URL (http://localhost:3000 for dev)
+- `GOOGLE_CLIENT_ID` & `GOOGLE_CLIENT_SECRET` - From Google Cloud Console
+- `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` & `STRIPE_PUBLISHABLE_KEY` - From Stripe Dashboard
+- `RESEND_API_KEY` - From Resend Dashboard
+- `EMAIL_FROM` - Your sender email (e.g., noreply@yourdomain.com)
+- `NEXT_PUBLIC_APP_URL` - Your public app URL (same as NEXTAUTH_URL)
+
+See [docs/13-environment-variables.md](docs/13-environment-variables.md) for detailed instructions.
+
+### 2. Install & Setup Database
+
+**Supported Database Services (PostgreSQL):**
+
+- [Supabase](https://supabase.com) - Recommended, free tier available
+- [Neon](https://neon.tech) - Serverless, free tier available
+- [Railway](https://railway.app) - Simple setup, pay-as-you-go
+- [Vercel Postgres](https://vercel.com/storage/postgres) - Native Vercel integration
 
 ```bash
 pnpm install
 pnpm db:setup
 ```
 
-### 2.5. Configure Stripe (5 minutes)
+### 3. Configure Stripe
 
-1. **Create Stripe Products & Prices:**
-   - Go to [Stripe Dashboard](https://dashboard.stripe.com/)
-   - Navigate to **Products** → **Create product**
-   - Name: "Pro Plan", Price: $29/month
-   - Copy the **Price ID** (looks like `price_1AbCdEfGhIjKlMnOpQrSt`)
+1. Create a product in [Stripe Dashboard](https://dashboard.stripe.com/) → Products
+2. Add a monthly price (e.g., $29/month)
+3. Copy the Price ID and run:
+   ```bash
+   pnpm stripe:update-price pro price_xxxxxxxxxxxxx
+   ```
 
-2. **Update Database:**
-   - Use the update script
-     ```bash
-     pnpm stripe:update-price pro YOUR_PRICE_ID
-     # Example: pnpm stripe:update-price pro price_1AbCdEfGhIjKlMnOpQrSt
-     ```
-
-3. **Configure Webhooks:**
-   - In Stripe Dashboard → **Webhooks**
-   - Add endpoint: `https://yourdomain.com/api/stripe/webhook`
-   - Select events: `checkout.session.completed`, `invoice.paid`, `customer.subscription.updated`, `customer.subscription.deleted`
-   - Copy the **webhook secret** to `STRIPE_WEBHOOK_SECRET`
-
-### 3. Start Development Server (1 minute)
+### 4. Start Development
 
 ```bash
 pnpm dev
 ```
 
-### 4. Test Authentication (4 minutes)
+Open [http://localhost:3000](http://localhost:3000)
 
-- Open [http://localhost:3000](http://localhost:3000)
-- Click "Continue with Google" or "Send magic link"
-- Complete authentication flow
-- **Your Swift Deploy app is working!** 🎉
+### 5. Test the App
 
-### 5. Deploy to Production (2 minutes)
+1. Click "Get Started" or "Sign In"
+2. Sign in with Google or magic link
+3. Explore the dashboard at `/product`
+4. Check the billing page at `/billing`
 
-- Push to GitHub
-- Connect to Vercel
-- Deploy
-- Your SaaS is live with authentication
+## What's Included
 
-## 🏗️ Build Your Product
+| Feature              | Status   | Docs                                            |
+| -------------------- | -------- | ----------------------------------------------- |
+| Google OAuth         | ✅ Ready | [01-auth.md](docs/01-auth.md)                   |
+| Magic Links          | ✅ Ready | [01-auth.md](docs/01-auth.md)                   |
+| Stripe Subscriptions | ✅ Ready | [03-stripe.md](docs/03-stripe.md)               |
+| Plans & Entitlements | ✅ Ready | [04-entitlements.md](docs/04-entitlements.md)   |
+| Email System         | ✅ Ready | [05-email.md](docs/05-email.md)                 |
+| Landing Pages        | ✅ Ready | [07-landing-pages.md](docs/07-landing-pages.md) |
+| Paywalls             | ✅ Ready | [08-paywalls.md](docs/08-paywalls.md)           |
+| Protected Routes     | ✅ Ready | [09-app-pages.md](docs/09-app-pages.md)         |
+| SEO                  | ✅ Ready | [06-seo.md](docs/06-seo.md)                     |
+| Database             | ✅ Ready | [02-database.md](docs/02-database.md)           |
 
-**Edit ONLY the `/product` folder.** Everything else is protected boilerplate.
+## Project Structure
 
-- `/src/app/product/page.tsx` - Your main product dashboard
-- `/src/app/product/api/` - Add your API routes
-- `/src/components/product/` - Add your UI components
+```
+src/
+├── app/
+│   ├── (protected)/     # Auth-required pages (dashboard, billing)
+│   ├── api/             # API routes
+│   ├── auth/            # Login pages
+│   └── ...              # Landing pages (home, pricing, contact, etc.)
+├── components/
+│   ├── landing/         # Landing page sections
+│   ├── product/         # Your product components (editable)
+│   └── ui/              # shadcn/ui components
+├── emails/              # Email templates
+├── hooks/               # React hooks
+├── lib/                 # Core utilities
+└── docs/                # Documentation
+```
 
-### Paywall Protection Example
+## File Markers
+
+Files are marked at the top:
+
+- **🔒 CORE SYSTEM - DO NOT MODIFY**: Critical boilerplate. Don't edit.
+- **🏗️ USER EDITABLE**: Safe to customize. Build your product here.
+
+## Build Your Product
+
+Your code goes here:
+
+| Location                    | Purpose            |
+| --------------------------- | ------------------ |
+| `/app/(protected)/product/` | Your dashboard     |
+| `/components/product/`      | Your UI components |
+| `/app/api/`                 | Your API routes    |
+
+### Example: Adding a Feature
+
+1. Create a component:
+
+   ```typescript
+   // /components/product/MyFeature.tsx
+   export function MyFeature() {
+     return <div>My Feature</div>;
+   }
+   ```
+
+2. Add to dashboard:
+
+   ```typescript
+   // /app/(protected)/product/page.tsx
+   import { MyFeature } from "@/components/product/MyFeature";
+   ```
+
+3. Gate behind paywall (optional):
+   ```typescript
+   <FeatureGate entitlement="pro_features">
+     <MyFeature />
+   </FeatureGate>
+   ```
+
+## Paywall Example
 
 ```typescript
-// Protect a route with entitlements
-import { requireEntitlement } from "@/lib/auth-utils";
+import { FeatureGate } from "@/components/FeatureGate";
 
-export default async function ProFeaturePage() {
-  const user = await requireEntitlement("pro_features");
-  // User has pro_features entitlement, show premium content
-  return <div>Premium feature content</div>;
-}
-
-// Check entitlements without redirecting
-import { hasEntitlement } from "@/lib/auth-utils";
-
-export default async function Dashboard() {
-  const hasProAccess = await hasEntitlement("pro_features");
-
+export default function Dashboard() {
   return (
     <div>
-      <h1>Dashboard</h1>
-      {hasProAccess ? (
-        <ProFeatures />
-      ) : (
-        <UpgradePrompt />
-      )}
+      <FreeContent />
+
+      <FeatureGate entitlement="pro_features">
+        <PremiumContent />  {/* Only shown to Pro users */}
+      </FeatureGate>
     </div>
   );
 }
 ```
 
-The boilerplate handles:
+## Available Entitlements
 
-- ✅ **Authentication**: Google OAuth + Email Magic Links
-- ✅ **Database**: PostgreSQL with Prisma ORM
-- ✅ **Email**: Passwordless auth + modular email system (Welcome, Subscription, Payment Failed, Contact)
-- ✅ **Billing**: Stripe subscriptions with smart data refresh
-- ✅ **UI**: Modern design with shadcn/ui + Tailwind + Toast notifications
-- ✅ **Security**: Enterprise-grade session management
+| Entitlement        | Plan | Usage             |
+| ------------------ | ---- | ----------------- |
+| `basic_access`     | Free | Basic dashboard   |
+| `pro_features`     | Pro  | Advanced features |
+| `api_access`       | Pro  | API access        |
+| `priority_support` | Pro  | Priority support  |
 
-**You focus on building your product features.**
+## Commands
 
-## 💳 Subscription Management
-
-Swift Deploy includes a complete subscription system:
-
-- **Plans & Entitlements**: Flexible permission system
-- **Stripe Integration**: Secure payment processing
-- **Billing Dashboard**: `/billing` for subscription management
-- **Smart Data Refresh**: Auto-updates after payments (no manual refresh needed)
-- **Status Messages**: Success/error feedback during checkout
-- **Webhook Sync**: Automatic entitlement updates
-- **Upgrade Flow**: One-click subscription upgrades with loading indicators
-
-### Adding New Plans
-
-1. **Create Stripe Price** in Stripe Dashboard
-2. **Add to Database Seed** (`prisma/seed.ts`)
-3. **Link Entitlements** in the seed script
-4. **Update UI** to show new plan options
-
-The system automatically handles billing, webhooks, and entitlement management.
-
-## 📧 Email System
-
-Swift Deploy includes a modular email system built on Resend:
-
-- **Welcome Emails**: Automated welcome messages for new users
-- **Subscription Confirmations**: Payment success notifications
-- **Payment Failed Alerts**: Retry payment notifications
-- **Contact Form Forwarding**: Admin notifications for user inquiries
-- **React Templates**: Professional, responsive email designs
-- **Type-Safe**: Full TypeScript support with proper validation
-
-### Testing Emails
-
-Test the email system from the product dashboard:
-
-1. Navigate to `/product`
-2. Scroll to the "📧 Test Email System" section
-3. Click "Send Welcome Email"
-4. Check your inbox for the professionally designed email
-
-### Adding New Email Types
-
-```typescript
-// Add to src/lib/email.ts
-async sendCustomEmail({
-  to,
-  subject,
-  // ... props
-}: CustomEmailProps) {
-  const { CustomEmail } = await import("@/emails/templates/CustomEmail");
-
-  return sendEmail({
-    to,
-    subject: "Custom Subject",
-    template: CustomEmail,
-    templateProps: { /* ... */ },
-  });
-}
+```bash
+pnpm dev              # Start development server
+pnpm build            # Build for production
+pnpm db:setup         # Setup database (generate + push + seed)
+pnpm db:studio        # Open Prisma Studio
+pnpm stripe:update-price pro price_xxx  # Update Stripe price ID
 ```
 
-The email system is fully extensible and production-ready.
+## Documentation
 
-## 🔐 Authentication System
+Full documentation is in the `/docs` folder:
 
-Swift Deploy uses NextAuth.js v4 with secure, modern authentication:
+- [00-overview.md](docs/00-overview.md) - Project overview
+- [01-auth.md](docs/01-auth.md) - Authentication system
+- [02-database.md](docs/02-database.md) - Database schema
+- [03-stripe.md](docs/03-stripe.md) - Stripe integration
+- [04-entitlements.md](docs/04-entitlements.md) - Feature gating
+- [05-email.md](docs/05-email.md) - Email system
+- [06-seo.md](docs/06-seo.md) - SEO configuration
+- [07-landing-pages.md](docs/07-landing-pages.md) - Marketing pages
+- [08-paywalls.md](docs/08-paywalls.md) - Paywall implementation
+- [09-app-pages.md](docs/09-app-pages.md) - Protected routes
+- [10-product-features.md](docs/10-product-features.md) - Building features
+- [11-deployment.md](docs/11-deployment.md) - Production deployment
+- [12-seeding.md](docs/12-seeding.md) - Database seeding
+- [13-environment-variables.md](docs/13-environment-variables.md) - All env vars
 
-- **Google OAuth**: One-click sign-in with Google accounts
-- **Email Magic Links**: Passwordless authentication via Resend
-- **Account Linking**: Seamless linking between Google and email accounts
-- **Session Management**: JWT-based sessions with automatic renewal
-- **Security**: CSRF protection, secure cookies, rate limiting
+## Deployment
 
-## 🎨 UI & Design
+1. Push to GitHub
+2. Connect to Vercel
+3. Add environment variables
+4. Deploy
 
-Clean, professional SaaS design with modern components:
+See [11-deployment.md](docs/11-deployment.md) for detailed instructions.
 
-- **Framework**: Next.js 14 with App Router
-- **Styling**: Tailwind CSS with dark mode support
-- **Components**: shadcn/ui (Button, Input, Card, Separator, Sonner toasts)
-- **Icons**: Lucide React for consistent iconography
-- **Typography**: Geist Sans font family
-- **Responsive**: Mobile-first design
+## Tech Stack
 
-## 🔧 Tech Stack
+- **Framework**: Next.js 14 (App Router)
+- **Language**: TypeScript
+- **Database**: PostgreSQL + Prisma
+- **Auth**: NextAuth.js v4
+- **Payments**: Stripe
+- **Email**: Resend
+- **Styling**: Tailwind CSS + shadcn/ui
 
-- **Frontend**: Next.js 14, React 19, TypeScript
-- **Styling**: Tailwind CSS, shadcn/ui, Sonner (toasts)
-- **Authentication**: NextAuth.js v4 (Google OAuth + Email Magic Links)
-- **Database**: PostgreSQL + Prisma ORM
-- **Payments**: Stripe (Subscriptions + Webhooks)
-- **Email**: Resend API (Modular React-based email system)
-- **Deployment**: Vercel-ready
-- **Development**: Turbopack for fast builds
+## Support
 
-## 🚀 Deployment
-
-Swift Deploy deploys seamlessly to Vercel:
-
-1. **Push to GitHub**
-2. **Connect Vercel** to your repository
-3. **Configure environment variables** in Vercel dashboard
-4. **Deploy** - your SaaS is live!
-
-## 🔧 Troubleshooting
-
-If something doesn't work:
-
-1. **Check `.env`** - All API keys must be set correctly
-2. **Database connection** - Ensure PostgreSQL is running
-3. **Google OAuth** - Verify redirect URI in Google Cloud Console
-4. **Email delivery** - Check Resend dashboard for email logs
-
-## 🎯 Philosophy
-
-Swift Deploy is opinionated and production-ready. No tutorials, no choices, no learning curve. Just working code that gets you deployed fast.
+- Check the `/docs` folder for detailed documentation
+- Review example implementations in the codebase
+- Look for 🏗️ USER EDITABLE markers for safe customization points
 
 **Built for serious SaaS founders who want to ship, not tinker.**

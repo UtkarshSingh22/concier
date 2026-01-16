@@ -1,4 +1,7 @@
-// Client component for the product page with email sending functionality
+// 🏗️ USER EDITABLE - PRODUCT DASHBOARD CLIENT
+// This is your main product dashboard. Build your features here.
+// Safe to edit: Everything - this is where your product code goes.
+// The email test button is just an example - replace with your features.
 
 "use client";
 

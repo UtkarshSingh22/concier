@@ -1,6 +1,7 @@
 // 🏗️ USER EDITABLE - UPGRADE PROMPT COMPONENT
-// Customize upgrade messaging, styling, and checkout flow.
-// This component is fully editable - modify copy, design, or add new features.
+// Customize upgrade messaging, styling, and plan mapping.
+// Safe to edit: Copy, design, PLAN_REQUIREMENTS mapping.
+// Keep the Stripe checkout flow logic intact.
 
 "use client";
 

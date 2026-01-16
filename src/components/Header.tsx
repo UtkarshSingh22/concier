@@ -1,6 +1,7 @@
 // 🏗️ USER EDITABLE - HEADER COMPONENT
-// Customize navigation, branding, and user menu.
-// This component is editable - modify links, styling, and behavior.
+// Customize branding, navigation links, and styling.
+// Safe to edit: Logo text, styling, additional nav links.
+// Core functionality (auth state, sign out) should remain intact.
 
 "use client";
 
