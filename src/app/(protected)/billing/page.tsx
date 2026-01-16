@@ -90,10 +90,46 @@ const BillingPage = () => {
     const success = searchParams.get("success");
 
     if (success === "true") {
-      // If success param is present, delay API loading to allow webhook processing
+      // If success param is present, use polling strategy to wait for webhook
+      let pollAttempts = 0;
+      const maxAttempts = 5;
+      const pollInterval = 1500; // 1.5 seconds between attempts
+
+      const pollForSubscription = async () => {
+        try {
+          const response = await fetch("/api/user/subscription");
+          if (response.ok) {
+            const data = await response.json();
+
+            // Check if we have a non-null subscription that's not "free"
+            if (data.subscription && data.subscription.plan?.name !== "free") {
+              // Webhook processed! Fetch all data
+              await fetchData();
+              return true; // Stop polling
+            }
+          }
+        } catch (error) {
+          console.error("Poll attempt failed:", error);
+        }
+
+        pollAttempts++;
+
+        if (pollAttempts < maxAttempts) {
+          // Keep polling
+          setTimeout(pollForSubscription, pollInterval);
+        } else {
+          // Max attempts reached, fetch anyway
+          console.log("Max polling attempts reached, fetching data");
+          await fetchData();
+        }
+
+        return false;
+      };
+
+      // Start polling after initial delay
       const timer = setTimeout(() => {
-        fetchData();
-      }, 2000); // 2 second delay for webhook processing
+        pollForSubscription();
+      }, 2000); // Initial 2 second delay
 
       return () => clearTimeout(timer);
     } else {
