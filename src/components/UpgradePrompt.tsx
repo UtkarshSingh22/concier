@@ -34,6 +34,7 @@ const PLAN_REQUIREMENTS: Record<string, { name: string; planName: string }> = {
   pro_features: { name: "Pro Plan", planName: "pro" },
   api_access: { name: "Pro Plan", planName: "pro" },
   priority_support: { name: "Pro Plan", planName: "pro" },
+  ai_access: { name: "Pro Plan", planName: "pro" },
 };
 
 export function UpgradePrompt({
@@ -84,15 +85,15 @@ export function UpgradePrompt({
   };
 
   return (
-    <Card className="max-w-md mx-auto border-2 border-dashed border-indigo-200 bg-gradient-to-br from-indigo-50/50 to-purple-50/50">
+    <Card className="max-w-md mx-auto border-2 border-dashed border-indigo-200 dark:border-indigo-800 bg-gradient-to-br from-indigo-50/50 to-purple-50/50 dark:from-indigo-950/50 dark:to-purple-950/50">
       <CardHeader className="text-center pb-4">
-        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-purple-100">
-          <Crown className="h-6 w-6 text-indigo-600" />
+        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900 dark:to-purple-900">
+          <Crown className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
         </div>
-        <CardTitle className="text-xl text-gray-900">
+        <CardTitle className="text-xl text-gray-900 dark:text-gray-100">
           {title || defaultTitle}
         </CardTitle>
-        <CardDescription className="text-gray-600 mt-2">
+        <CardDescription className="text-gray-600 dark:text-gray-400 mt-2">
           {description || defaultDescription}
         </CardDescription>
       </CardHeader>
@@ -101,7 +102,7 @@ export function UpgradePrompt({
         <Button
           onClick={handleUpgrade}
           disabled={isLoading}
-          className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+          className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 dark:from-indigo-500 dark:to-purple-500 dark:hover:from-indigo-600 dark:hover:to-purple-600 text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
         >
           {isLoading ? (
             <>
@@ -116,7 +117,7 @@ export function UpgradePrompt({
           )}
         </Button>
 
-        <p className="text-xs text-gray-500 mt-4">
+        <p className="text-xs text-gray-500 dark:text-gray-400 mt-4">
           Secure payment • Cancel anytime • 30-day money back guarantee
         </p>
       </CardContent>

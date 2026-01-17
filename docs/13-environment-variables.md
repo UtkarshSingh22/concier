@@ -83,6 +83,20 @@ Used in: `sentry.*.config.ts`, error boundaries, API routes
 
 See [14-error-tracking.md](14-error-tracking.md) for setup instructions.
 
+### AI Providers (Optional)
+
+| Variable            | Description              | Example                       |
+| ------------------- | ------------------------ | ----------------------------- |
+| `OPENAI_API_KEY`    | OpenAI API secret key    | `sk-xxxxxxxxxxxxxxxx`         |
+| `ANTHROPIC_API_KEY` | Anthropic API secret key | `sk-ant-xxxxxxxxxxxxx`        |
+| `GEMINI_API_KEY`    | Google Gemini API key    | `AIzaSyxxxxxxxxxxxxxxxxxxxxx` |
+
+**Note:** AI providers are optional. The app works normally without them. Configure at least one provider to enable AI features.
+
+Used in: `/lib/ai/providers/`
+
+See [16-ai-setup.md](16-ai-setup.md) for setup instructions.
+
 ## Environment File Template
 
 Create `.env` file with these values:
@@ -130,6 +144,18 @@ SENTRY_ENVIRONMENT=development
 
 # Client-side error tracking
 NEXT_PUBLIC_SENTRY_DSN=https://1234567890abcdef1234567890abcdef@o123456.ingest.sentry.io/1234567
+
+# ===================
+# AI PROVIDERS (Optional)
+# ===================
+# OpenAI (for GPT models)
+OPENAI_API_KEY=sk-your-openai-api-key
+
+# Anthropic (for Claude models)
+ANTHROPIC_API_KEY=sk-ant-your-anthropic-api-key
+
+# Google Gemini
+GEMINI_API_KEY=AIzaSy-your-gemini-api-key
 ```
 
 ## Getting API Keys

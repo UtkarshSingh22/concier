@@ -15,18 +15,20 @@ if (user.plan === "pro") { ... }
 ```
 
 Benefits:
+
 - Add/remove features from plans without code changes
 - Multiple plans can share entitlements
 - More granular control
 
 ## Default Entitlements
 
-| Name | Display Name | Plans |
-|------|--------------|-------|
-| `basic_access` | Basic Access | Free, Pro |
-| `pro_features` | Pro Features | Pro |
-| `api_access` | API Access | Pro |
-| `priority_support` | Priority Support | Pro |
+| Name               | Display Name     | Plans     |
+| ------------------ | ---------------- | --------- |
+| `basic_access`     | Basic Access     | Free, Pro |
+| `pro_features`     | Pro Features     | Pro       |
+| `api_access`       | API Access       | Pro       |
+| `priority_support` | Priority Support | Pro       |
+| `ai_access`        | AI Access        | Pro       |
 
 ## Server-Side Checks
 
@@ -54,8 +56,8 @@ Use the `FeatureGate` component:
 import { FeatureGate } from "@/components/FeatureGate";
 
 <FeatureGate entitlement="api_access">
-  <ApiKeyGenerator />  {/* Only shown if user has api_access */}
-</FeatureGate>
+  <ApiKeyGenerator /> {/* Only shown if user has api_access */}
+</FeatureGate>;
 ```
 
 Or use the hook directly:
@@ -65,27 +67,28 @@ import { useEntitlements } from "@/hooks/use-entitlements";
 
 function MyComponent() {
   const { hasEntitlement, loading } = useEntitlements();
-  
+
   if (loading) return <Spinner />;
   if (!hasEntitlement("pro_features")) return <UpgradePrompt />;
-  
+
   return <ProFeature />;
 }
 ```
 
 ## Key Files
 
-| File | Purpose |
-|------|---------|
-| `/lib/auth-utils.ts` | Server-side entitlement checks |
-| `/hooks/use-entitlements.ts` | Client-side hook |
-| `/components/FeatureGate.tsx` | UI gating component |
-| `/components/UpgradePrompt.tsx` | Upgrade prompt UI |
-| `/api/user/entitlements/route.ts` | Entitlements API |
+| File                              | Purpose                        |
+| --------------------------------- | ------------------------------ |
+| `/lib/auth-utils.ts`              | Server-side entitlement checks |
+| `/hooks/use-entitlements.ts`      | Client-side hook               |
+| `/components/FeatureGate.tsx`     | UI gating component            |
+| `/components/UpgradePrompt.tsx`   | Upgrade prompt UI              |
+| `/api/user/entitlements/route.ts` | Entitlements API               |
 
 ## Adding New Entitlements
 
 1. Add to `/prisma/seed.ts`:
+
    ```typescript
    prisma.entitlement.upsert({
      where: { name: "your_feature" },
@@ -94,7 +97,7 @@ function MyComponent() {
        displayName: "Your Feature",
        description: "What it does",
      },
-   })
+   });
    ```
 
 2. Link to plan in seed script
@@ -102,6 +105,7 @@ function MyComponent() {
 3. Run `pnpm db:seed`
 
 4. Update `PLAN_REQUIREMENTS` in `/components/UpgradePrompt.tsx`:
+
    ```typescript
    const PLAN_REQUIREMENTS = {
      your_feature: { name: "Pro Plan", planName: "pro" },
@@ -117,20 +121,20 @@ function MyComponent() {
 
 ## FeatureGate Props
 
-| Prop | Type | Description |
-|------|------|-------------|
-| `entitlement` | string | Required entitlement name |
-| `fallback` | ReactNode | Custom UI when locked (optional) |
-| `children` | ReactNode | Content shown when unlocked |
+| Prop          | Type      | Description                      |
+| ------------- | --------- | -------------------------------- |
+| `entitlement` | string    | Required entitlement name        |
+| `fallback`    | ReactNode | Custom UI when locked (optional) |
+| `children`    | ReactNode | Content shown when unlocked      |
 
 ## UpgradePrompt Props
 
-| Prop | Type | Description |
-|------|------|-------------|
-| `entitlement` | string | Entitlement that's required |
-| `title` | string | Custom title (optional) |
+| Prop          | Type   | Description                   |
+| ------------- | ------ | ----------------------------- |
+| `entitlement` | string | Entitlement that's required   |
+| `title`       | string | Custom title (optional)       |
 | `description` | string | Custom description (optional) |
-| `buttonText` | string | Custom button text (optional) |
+| `buttonText`  | string | Custom button text (optional) |
 
 ## What You Can Edit
 
@@ -143,4 +147,3 @@ function MyComponent() {
 - `/lib/auth-utils.ts` - Core entitlement logic
 - `/hooks/use-entitlements.ts` - Client hook logic
 - The entitlement → plan relationship structure
-

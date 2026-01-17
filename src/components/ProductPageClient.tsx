@@ -9,6 +9,8 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { FeatureGate } from "@/components/FeatureGate";
+import { AITest } from "@/components/product/AITest";
 
 export default function ProductPageClient() {
   const { data: session, status } = useSession();
@@ -115,31 +117,39 @@ export default function ProductPageClient() {
         </div>
       </div>
 
-      <div className="bg-green-50 dark:bg-green-950 p-4 rounded-lg mb-6 border border-green-200 dark:border-green-800">
-        <h3 className="text-sm font-medium text-green-800 dark:text-green-200 mb-2">
-          📧 Test Email System
-        </h3>
-        <p className="text-sm text-green-700 dark:text-green-300 mb-3">
-          Send yourself a welcome email to test the email system.
-        </p>
-        <Button
-          onClick={handleSendWelcomeEmail}
-          disabled={isSendingEmail}
-          className="bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600"
-        >
-          {isSendingEmail ? "Sending..." : "Send Welcome Email"}
-        </Button>
+      <div className="grid gap-4 md:grid-cols-2 mb-6">
+        <div className="p-4 rounded-lg border bg-card">
+          <h3 className="text-sm font-medium text-card-foreground mb-2">
+            Test Email System
+          </h3>
+          <p className="text-sm text-muted-foreground mb-3">
+            Send yourself a welcome email to test the email system.
+          </p>
+          <Button
+            onClick={handleSendWelcomeEmail}
+            disabled={isSendingEmail}
+            variant="outline"
+            size="sm"
+          >
+            {isSendingEmail ? "Sending..." : "Send Welcome Email"}
+          </Button>
+        </div>
+
+        <div className="p-4 rounded-lg border bg-card">
+          <h3 className="text-sm font-medium text-card-foreground mb-2">
+            Build Your Product
+          </h3>
+          <p className="text-sm text-muted-foreground">
+            This is where you implement your SaaS features. Add your dashboard,
+            API routes, and UI components in the /product directory.
+          </p>
+        </div>
       </div>
 
-      <div className="bg-blue-50 dark:bg-blue-950 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
-        <h3 className="text-sm font-medium text-blue-800 dark:text-blue-200 mb-2">
-          🚀 Build Your Product
-        </h3>
-        <p className="text-sm text-blue-700 dark:text-blue-300">
-          This is where you implement your SaaS features. Add your dashboard,
-          API routes, and UI components in the /product directory.
-        </p>
-      </div>
+      {/* Example / testing component — safe to remove */}
+      <FeatureGate entitlement="ai_access">
+        <AITest />
+      </FeatureGate>
     </>
   );
 }

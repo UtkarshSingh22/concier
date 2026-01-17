@@ -157,3 +157,19 @@ enum SubscriptionStatus {
   unpaid
   paused
 }
+
+// AI usage tracking for monitoring and cost control
+model AiUsage {
+  id               String   @id @default(cuid())
+  userId           String
+  provider         String   // "openai", "anthropic"
+  model            String   // "gpt-4o-mini", "claude-3-5-sonnet", etc.
+  promptTokens     Int
+  completionTokens Int
+  totalTokens      Int
+
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@map("ai_usage")
+}

@@ -48,6 +48,15 @@ async function main() {
         description: "Priority email support and faster response times",
       },
     }),
+    prisma.entitlement.upsert({
+      where: { name: "ai_access" },
+      update: {},
+      create: {
+        name: "ai_access",
+        displayName: "AI Access",
+        description: "Access to AI-powered features and API endpoints",
+      },
+    }),
   ]);
 
   console.log(`✅ Created ${entitlements.length} entitlements`);
