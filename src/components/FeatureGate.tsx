@@ -8,6 +8,7 @@
 import { ReactNode } from "react";
 import { useEntitlements } from "@/hooks/use-entitlements";
 import { UpgradePrompt } from "./UpgradePrompt";
+import { Loader2 } from "lucide-react";
 
 interface FeatureGateProps {
   entitlement: string;
@@ -25,8 +26,8 @@ export function FeatureGate({
   // Show loading state while checking entitlements
   if (loading) {
     return (
-      <div className="flex items-center justify-center p-8">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+      <div className="w-full border rounded-lg p-8 flex items-center justify-center bg-card">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
       </div>
     );
   }
@@ -34,8 +35,8 @@ export function FeatureGate({
   // If user is not authenticated, show login prompt (optional)
   if (!isAuthenticated) {
     return (
-      <div className="text-center p-8 border border-gray-200 rounded-lg bg-gray-50">
-        <p className="text-gray-600 mb-4">
+      <div className="w-full border rounded-lg bg-card text-center p-8">
+        <p className="text-muted-foreground mb-4">
           Please sign in to access this feature.
         </p>
         <a
@@ -50,14 +51,18 @@ export function FeatureGate({
 
   // If user has the entitlement, show the feature
   if (hasEntitlement(entitlement)) {
-    return <>{children}</>;
+    return <div className="w-full border rounded-lg">{children}</div>;
   }
 
   // If custom fallback provided, use it
   if (fallback) {
-    return <>{fallback}</>;
+    return <div className="w-full border rounded-lg">{fallback}</div>;
   }
 
   // Default to upgrade prompt
-  return <UpgradePrompt entitlement={entitlement} />;
+  return (
+    <div className="w-full border rounded-lg">
+      <UpgradePrompt entitlement={entitlement} />
+    </div>
+  );
 }

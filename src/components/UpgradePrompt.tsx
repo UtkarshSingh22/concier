@@ -86,7 +86,7 @@ export function UpgradePrompt({
   };
 
   return (
-    <Card className="max-w-md mx-auto border-2 border-dashed border-indigo-200 dark:border-indigo-800 bg-gradient-to-br from-indigo-50/50 to-purple-50/50 dark:from-indigo-950/50 dark:to-purple-950/50">
+    <Card className="mx-auto border-2 border-dashed border-indigo-200 dark:border-indigo-800 bg-gradient-to-br from-indigo-50/50 to-purple-50/50 dark:from-indigo-950/50 dark:to-purple-950/50">
       <CardHeader className="text-center pb-4">
         <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900 dark:to-purple-900">
           <Crown className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
