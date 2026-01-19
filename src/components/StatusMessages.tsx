@@ -38,10 +38,12 @@ export const StatusMessages = () => {
 
   if (success === "true") {
     return (
-      <Alert className="mb-6 border-green-200 bg-green-50">
-        <CheckCircle className="h-4 w-4 text-green-600" />
-        <AlertTitle className="text-green-800">Payment Successful!</AlertTitle>
-        <AlertDescription className="text-green-700">
+      <Alert className="mb-6 border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950">
+        <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
+        <AlertTitle className="text-green-800 dark:text-green-200">
+          Payment Successful!
+        </AlertTitle>
+        <AlertDescription className="text-green-700 dark:text-green-300">
           Your subscription has been activated! Data will update automatically
           in a few seconds. Welcome aboard! 🚀
         </AlertDescription>
