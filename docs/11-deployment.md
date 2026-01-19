@@ -6,29 +6,48 @@ The boilerplate is ready for deployment to Vercel.
 
 Before deploying:
 
-- [ ] Stripe products and prices created
+- [ ] Payment provider products/plans created (Stripe prices or Razorpay plans)
 - [ ] Database hosted (e.g., Supabase, Railway, Neon)
 - [ ] Google OAuth configured with production redirect URI
 - [ ] Resend API key ready
+- [ ] Payment provider webhook configured
 
 ## Environment Variables
 
 Set these in your hosting platform:
 
-```
+```bash
 # Required
 DATABASE_URL=postgresql://...
 AUTH_SECRET=your-random-32-char-secret
 GOOGLE_CLIENT_ID=...
 GOOGLE_CLIENT_SECRET=...
-STRIPE_SECRET_KEY=sk_live_...
-STRIPE_WEBHOOK_SECRET=whsec_...
-STRIPE_PUBLISHABLE_KEY=pk_live_...
 RESEND_API_KEY=re_...
 EMAIL_FROM=noreply@yourdomain.com
 NEXT_PUBLIC_APP_URL=https://yourdomain.com
 NEXTAUTH_URL=https://yourdomain.com
 
+# Payment Provider (choose one)
+PAYMENT_PROVIDER=stripe  # or "razorpay"
+
+# Stripe (if using Stripe)
+STRIPE_SECRET_KEY=sk_live_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+STRIPE_PUBLISHABLE_KEY=pk_live_...
+
+# Razorpay (if using Razorpay)
+# RAZORPAY_KEY_ID=rzp_live_...
+# RAZORPAY_KEY_SECRET=...
+# RAZORPAY_WEBHOOK_SECRET=...
+
+# Optional - AI Providers
+# OPENAI_API_KEY=sk-...
+# ANTHROPIC_API_KEY=sk-ant-...
+# GEMINI_API_KEY=AIzaSy...
+
+# Optional - Error Tracking
+# SENTRY_DSN=https://...
+# NEXT_PUBLIC_SENTRY_DSN=https://...
 ```
 
 ## Vercel Deployment
@@ -57,21 +76,61 @@ git push -u origin main
    - Go to Google Cloud Console
    - Add production redirect URI: `https://yourdomain.com/api/auth/callback/google`
 
-2. **Configure Stripe Webhook**:
+2. **Configure Payment Provider Webhooks**:
+
+   **For Stripe:**
    - Stripe Dashboard → Webhooks
-   - Add endpoint: `https://yourdomain.com/api/stripe/webhook`
+   - Add endpoint: `https://yourdomain.com/api/payments/webhook/stripe`
+   - Select events: `checkout.session.completed`, `invoice.paid`, `invoice.payment_failed`, `customer.subscription.updated`, `customer.subscription.deleted`
    - Copy webhook secret to `STRIPE_WEBHOOK_SECRET`
 
-3. **Run Database Migration**:
+   **For Razorpay:**
+   - Razorpay Dashboard → Settings → Webhooks
+   - Add endpoint: `https://yourdomain.com/api/payments/webhook/razorpay`
+   - Select events: `subscription.activated`, `subscription.charged`, `subscription.cancelled`, `payment.failed`
+   - Copy webhook secret to `RAZORPAY_WEBHOOK_SECRET`
+
+3. **Connect to Production Database Locally**:
+
+   Update your local `.env` to point to production temporarily:
+
+   ```bash
+   # Save your local DATABASE_URL first!
+   DATABASE_URL="your-production-database-url"
+   ```
+
+4. **Run Database Migration & Seed**:
 
    ```bash
    npx prisma db push
    npx prisma db seed
    ```
 
-4. **Update Stripe Price IDs**:
+   This will:
+   - Create all tables
+   - Seed default plans (free, pro)
+   - Create admin user
+   - Link entitlements to plans
+
+5. **Update Payment Provider Plan IDs**:
+
+   **For Stripe:**
+
    ```bash
-   pnpm stripe:update-price pro price_live_xxxxx
+   node scripts/update-stripe-price.js pro price_live_xxxxx
+   ```
+
+   **For Razorpay:**
+
+   ```bash
+   node scripts/update-razorpay-plan.js pro plan_live_xxxxx
+   ```
+
+6. **Restore Local Database URL**:
+
+   ```bash
+   # Switch back to local database
+   DATABASE_URL="postgresql://localhost:5432/saas"
    ```
 
 ## Database Hosting Options
@@ -114,37 +173,60 @@ git push -u origin main
 
 - [ ] Environment variables set
 - [ ] Database migrated and seeded
-- [ ] Stripe prices linked to database
-- [ ] Stripe webhook configured
+- [ ] Payment provider plan IDs linked to database
+- [ ] Payment provider webhooks configured
 - [ ] Google OAuth redirect URI updated
 - [ ] Test login flow
 - [ ] Test subscription flow
 - [ ] Test email delivery
+- [ ] Verify payment provider is working (test mode first)
 
 ### After Launch
 
-- [ ] Monitor Stripe webhook logs
-- [ ] Check error logging
+- [ ] Monitor payment provider webhook logs
+- [ ] Check error logging (Sentry if configured)
 - [ ] Test magic link emails
 - [ ] Verify SEO (sitemap, robots.txt)
+- [ ] Monitor subscription creation and cancellation flows
 
-## Stripe Live Mode
+## Payment Provider Live Mode
 
 When moving to production:
 
+### Stripe Live Mode
+
 1. Switch from test keys to live keys:
 
-   ```
+   ```bash
    STRIPE_SECRET_KEY=sk_live_...
    STRIPE_PUBLISHABLE_KEY=pk_live_...
    ```
 
 2. Create live products in Stripe Dashboard
 
-3. Update price IDs in database:
+3. Update price IDs in production database:
 
    ```bash
-   pnpm stripe:update-price pro price_live_xxxxx
+   node scripts/update-stripe-price.js pro price_live_xxxxx
+   ```
+
+4. Configure live webhook endpoint
+
+### Razorpay Live Mode
+
+1. Switch from test keys to live keys:
+
+   ```bash
+   RAZORPAY_KEY_ID=rzp_live_...
+   RAZORPAY_KEY_SECRET=your-live-secret
+   ```
+
+2. Create live plans in Razorpay Dashboard
+
+3. Update plan IDs in production database:
+
+   ```bash
+   node scripts/update-razorpay-plan.js pro plan_live_xxxxx
    ```
 
 4. Configure live webhook endpoint
@@ -153,9 +235,17 @@ When moving to production:
 
 ### Webhook Failures
 
+**For Stripe:**
+
 - Check Stripe Dashboard → Developers → Webhooks → Logs
-- Verify webhook secret is correct
-- Ensure endpoint URL is correct
+- Verify `STRIPE_WEBHOOK_SECRET` is correct
+- Ensure endpoint URL is `https://yourdomain.com/api/payments/webhook/stripe`
+
+**For Razorpay:**
+
+- Check Razorpay Dashboard → Webhooks → Logs
+- Verify `RAZORPAY_WEBHOOK_SECRET` is correct
+- Ensure endpoint URL is `https://yourdomain.com/api/payments/webhook/razorpay`
 
 ### Auth Issues
 

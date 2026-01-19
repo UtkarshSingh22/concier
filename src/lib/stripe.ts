@@ -12,6 +12,9 @@ if (!process.env.STRIPE_SECRET_KEY) {
 if (!process.env.STRIPE_WEBHOOK_SECRET) {
   throw new Error("STRIPE_WEBHOOK_SECRET environment variable is required");
 }
+if (!process.env.STRIPE_PUBLISHABLE_KEY) {
+  throw new Error("STRIPE_PUBLISHABLE_KEY environment variable is required");
+}
 
 // Initialize Stripe client
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
@@ -36,19 +39,19 @@ export async function getStripePriceId(
     throw new Error(`Plan "${planName}" not found in database`);
   }
 
-  if (!plan.stripeId) {
+  if (!plan.stripePriceId) {
     throw new Error(
       `Plan "${planName}" does not have a Stripe price ID configured. Please update the database seed with your actual Stripe price ID.`
     );
   }
 
-  if (plan.stripeId.startsWith("price_")) {
+  if (plan.stripePriceId.startsWith("price_")) {
     // Looks like a real Stripe price ID
-    return plan.stripeId;
+    return plan.stripePriceId;
   } else {
     // Placeholder value - user needs to configure
     throw new Error(
-      `Plan "${planName}" has placeholder price ID "${plan.stripeId}". Please replace with your actual Stripe price ID from the Stripe dashboard.`
+      `Plan "${planName}" has placeholder price ID "${plan.stripePriceId}". Please replace with your actual Stripe price ID from the Stripe dashboard.`
     );
   }
 }
@@ -56,7 +59,7 @@ export async function getStripePriceId(
 // Helper to get plan by Stripe price ID
 export async function getPlanByStripePriceId(stripePriceId: string) {
   return await db.plan.findFirst({
-    where: { stripeId: stripePriceId },
+    where: { stripePriceId: stripePriceId },
     include: {
       entitlements: {
         include: {
@@ -136,18 +139,21 @@ export async function updateUserEntitlements(
 
     await db.subscription.upsert({
       where: {
-        stripeId: subscription.id,
+        providerSubscriptionId: subscription.id,
       },
       update: {
         status: subscription.status as any,
         currentPeriodStart: new Date(subscription.current_period_start * 1000),
         currentPeriodEnd: new Date(subscription.current_period_end * 1000),
         cancelAtPeriodEnd: subscription.cancel_at_period_end,
+        providerCustomerId: subscription.customer as string,
       },
       create: {
         userId,
         planId: plan.id,
-        stripeId: subscription.id,
+        provider: "stripe",
+        providerSubscriptionId: subscription.id,
+        providerCustomerId: subscription.customer as string,
         status: subscription.status as any,
         currentPeriodStart: new Date(subscription.current_period_start * 1000),
         currentPeriodEnd: new Date(subscription.current_period_end * 1000),

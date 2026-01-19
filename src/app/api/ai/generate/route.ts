@@ -72,20 +72,25 @@ function validateRequest(body: unknown): GenerateRequest {
 }
 
 /**
- * Check if user has ai_access entitlement
+ * Check if user has ai_access entitlement (optimized)
  */
 async function checkAIEntitlement(userId: string): Promise<boolean> {
+  // Single optimized query to check for ai_access entitlement
   const user = await db.user.findUnique({
     where: { id: userId },
-    include: {
+    select: {
       subscriptions: {
         where: { status: "active" },
-        include: {
+        select: {
           plan: {
-            include: {
+            select: {
               entitlements: {
-                include: {
-                  entitlement: true,
+                select: {
+                  entitlement: {
+                    select: {
+                      name: true,
+                    },
+                  },
                 },
               },
             },
@@ -95,7 +100,7 @@ async function checkAIEntitlement(userId: string): Promise<boolean> {
     },
   });
 
-  if (!user) return false;
+  if (!user?.subscriptions) return false;
 
   return user.subscriptions.some((sub) =>
     sub.plan.entitlements.some((pe) => pe.entitlement.name === "ai_access")

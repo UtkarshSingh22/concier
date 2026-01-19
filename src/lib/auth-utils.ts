@@ -107,17 +107,30 @@ export async function getCurrentUserSubscription() {
   const { db } = await import("./db");
   const user = await db.user.findUnique({
     where: { email: session.user.email },
-    include: {
+    select: {
       subscriptions: {
         where: { status: "active" },
-        include: {
+        select: {
+          id: true,
+          planId: true,
+          provider: true,
+          providerSubscriptionId: true,
+          providerCustomerId: true,
+          status: true,
+          currentPeriodStart: true,
+          currentPeriodEnd: true,
+          cancelAtPeriodEnd: true,
           plan: {
-            include: {
-              entitlements: {
-                include: {
-                  entitlement: true,
-                },
-              },
+            select: {
+              id: true,
+              name: true,
+              displayName: true,
+              description: true,
+              price: true,
+              interval: true,
+              isActive: true,
+              stripePriceId: true,
+              razorpayPlanId: true,
             },
           },
         },
@@ -129,24 +142,66 @@ export async function getCurrentUserSubscription() {
 }
 
 export async function getCurrentUserEntitlements() {
-  const subscription = await getCurrentUserSubscription();
+  const { getServerSession } = await import("next-auth");
+  const { authOptions } = await import("./auth");
+  const { db } = await import("./db");
 
-  if (!subscription) {
-    // Return free plan entitlements
-    const { db } = await import("./db");
-    const freePlan = await db.plan.findUnique({
-      where: { name: "free" },
-      include: {
-        entitlements: {
-          include: {
-            entitlement: true,
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.email) {
+    return [];
+  }
+
+  // Single optimized query: Get user with active subscription and entitlements in one go
+  const user = await db.user.findUnique({
+    where: { email: session.user.email },
+    select: {
+      subscriptions: {
+        where: { status: "active" },
+        select: {
+          plan: {
+            select: {
+              entitlements: {
+                select: {
+                  entitlement: {
+                    select: {
+                      id: true,
+                      name: true,
+                      displayName: true,
+                      description: true,
+                    },
+                  },
+                },
+              },
+            },
           },
         },
       },
-    });
+    },
+  });
 
-    return freePlan?.entitlements.map((pe) => pe.entitlement) || [];
+  // If user has active subscription, return its entitlements
+  if (user?.subscriptions && user.subscriptions.length > 0) {
+    return user.subscriptions[0].plan.entitlements.map((pe) => pe.entitlement);
   }
 
-  return subscription.plan.entitlements.map((pe) => pe.entitlement);
+  // Otherwise, return free plan entitlements (with caching potential)
+  const freePlan = await db.plan.findUnique({
+    where: { name: "free" },
+    select: {
+      entitlements: {
+        select: {
+          entitlement: {
+            select: {
+              id: true,
+              name: true,
+              displayName: true,
+              description: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  return freePlan?.entitlements.map((pe) => pe.entitlement) || [];
 }

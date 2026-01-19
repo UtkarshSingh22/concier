@@ -32,6 +32,14 @@ Used in: `/prisma/schema.prisma`
 
 Used in: `/lib/auth.ts`, `/api/auth/`, `/api/send-welcome-email/`
 
+### Payments
+
+| Variable           | Description             | Example                |
+| ------------------ | ----------------------- | ---------------------- |
+| `PAYMENT_PROVIDER` | Active payment provider | `stripe` or `razorpay` |
+
+Default: `stripe` if not set.
+
 ### Stripe
 
 | Variable                 | Description             | Example                 |
@@ -40,7 +48,17 @@ Used in: `/lib/auth.ts`, `/api/auth/`, `/api/send-welcome-email/`
 | `STRIPE_PUBLISHABLE_KEY` | Stripe publishable key  | `pk_test_xxxxxxxxxxxxx` |
 | `STRIPE_WEBHOOK_SECRET`  | Webhook endpoint secret | `whsec_xxxxxxxxxxxxx`   |
 
-Used in: `/lib/stripe.ts`, `/api/stripe/`
+Used in: `/lib/payments/stripe.ts`, `/api/payments/`
+
+### Razorpay (Alternative to Stripe)
+
+| Variable                  | Description             | Example                 |
+| ------------------------- | ----------------------- | ----------------------- |
+| `RAZORPAY_KEY_ID`         | Razorpay API key ID     | `rzp_test_xxxxxxxxxxxx` |
+| `RAZORPAY_KEY_SECRET`     | Razorpay API key secret | `xxxxxxxxxxxxxxxx`      |
+| `RAZORPAY_WEBHOOK_SECRET` | Webhook endpoint secret | `xxxxxxxxxxxxxxxx`      |
+
+Used in: `/lib/payments/razorpay.ts`, `/api/payments/`
 
 ### Email
 
@@ -118,11 +136,20 @@ GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.com
 GOOGLE_CLIENT_SECRET=your-google-client-secret
 
 # ===================
-# STRIPE
+# PAYMENTS
 # ===================
+# Select payment provider: "stripe" (default) or "razorpay"
+PAYMENT_PROVIDER=stripe
+
+# --- Stripe (if using Stripe) ---
 STRIPE_SECRET_KEY=sk_test_your-stripe-secret-key
 STRIPE_PUBLISHABLE_KEY=pk_test_your-stripe-publishable-key
 STRIPE_WEBHOOK_SECRET=whsec_your-webhook-secret
+
+# --- Razorpay (if using Razorpay) ---
+# RAZORPAY_KEY_ID=rzp_test_your-razorpay-key-id
+# RAZORPAY_KEY_SECRET=your-razorpay-key-secret
+# RAZORPAY_WEBHOOK_SECRET=your-razorpay-webhook-secret
 
 # ===================
 # EMAIL (Resend)
@@ -188,8 +215,20 @@ Or use: [generate-secret.vercel.app](https://generate-secret.vercel.app/32)
 3. Copy Publishable key and Secret key
 4. For webhooks:
    - Developers → Webhooks
-   - Add endpoint: `https://yourdomain.com/api/stripe/webhook`
+   - Add endpoint: `https://yourdomain.com/api/payments/webhook/stripe`
+   - Select events: `checkout.session.completed`, `invoice.paid`, `invoice.payment_failed`, `customer.subscription.updated`, `customer.subscription.deleted`
    - Copy Signing secret
+
+### Razorpay Keys (Alternative)
+
+1. Go to [Razorpay Dashboard](https://dashboard.razorpay.com/)
+2. Settings → API Keys
+3. Generate and copy Key ID and Key Secret
+4. For webhooks:
+   - Settings → Webhooks
+   - Add endpoint: `https://yourdomain.com/api/payments/webhook/razorpay`
+   - Select events: `subscription.activated`, `subscription.charged`, `subscription.cancelled`, `payment.failed`
+   - Copy Webhook Secret
 
 ### Resend API Key
 

@@ -1,6 +1,6 @@
 // 🔒 CORE SYSTEM - DO NOT MODIFY
 // Client component for handling subscription upgrades
-// Creates Stripe checkout sessions and redirects users
+// Creates checkout sessions via unified payment abstraction (Stripe or Razorpay)
 
 "use client";
 
@@ -28,7 +28,8 @@ export const UpgradeButton = ({
     try {
       setIsLoading(true);
 
-      const response = await fetch("/api/stripe/create-checkout-session", {
+      // Use unified payment checkout endpoint (routes to Stripe or Razorpay)
+      const response = await fetch("/api/payments/checkout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -43,7 +44,7 @@ export const UpgradeButton = ({
 
       const { url } = await response.json();
 
-      // Redirect to Stripe Checkout
+      // Redirect to payment provider checkout
       window.location.href = url;
     } catch (error) {
       console.error("Upgrade error:", error);

@@ -6,11 +6,11 @@ This guide explains where and how to build your product features.
 
 All your custom code goes in:
 
-| Location | Purpose |
-|----------|---------|
-| `/app/(protected)/product/` | Dashboard pages |
-| `/components/product/` | Product-specific components |
-| `/app/api/` | API routes |
+| Location                    | Purpose                     |
+| --------------------------- | --------------------------- |
+| `/app/(protected)/product/` | Dashboard pages             |
+| `/components/product/`      | Product-specific components |
+| `/app/api/`                 | API routes                  |
 
 ## Starting Point
 
@@ -95,7 +95,7 @@ export async function GET(request: NextRequest) {
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  
+
   // Your logic here
   return NextResponse.json({ data: "..." });
 }
@@ -105,10 +105,10 @@ export async function POST(request: NextRequest) {
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  
+
   const body = await request.json();
   // Your logic here
-  
+
   return NextResponse.json({ success: true });
 }
 ```
@@ -158,7 +158,7 @@ export async function POST(request: NextRequest) {
   if (!hasPro) {
     return NextResponse.json({ error: "Upgrade required" }, { status: 403 });
   }
-  
+
   // Pro-only logic
 }
 ```
@@ -194,11 +194,11 @@ import { Button } from "@/components/ui/button";
 
 export function TaskList() {
   const [tasks, setTasks] = useState([]);
-  
+
   useEffect(() => {
     fetch("/api/tasks").then(r => r.json()).then(setTasks);
   }, []);
-  
+
   const addTask = async () => {
     await fetch("/api/tasks", {
       method: "POST",
@@ -206,7 +206,7 @@ export function TaskList() {
     });
     // Refresh tasks
   };
-  
+
   return (
     <div>
       {tasks.map(task => <div key={task.id}>{task.title}</div>)}
@@ -230,11 +230,11 @@ export async function GET() {
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  
+
   const tasks = await db.task.findMany({
     where: { userId: session.user.id },
   });
-  
+
   return NextResponse.json(tasks);
 }
 ```
@@ -249,7 +249,6 @@ export async function GET() {
 ## What NOT to Change
 
 - Core auth logic
-- Stripe integration
+- Payment provider integration
 - Entitlement system
 - Email system
-

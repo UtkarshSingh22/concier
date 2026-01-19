@@ -133,36 +133,56 @@ const enterprisePlan = await prisma.plan.upsert({
     price: 9900, // $99.00 (in cents)
     interval: "month",
     isActive: true,
-    stripeId: "price_enterprise_monthly", // Placeholder
+    stripePriceId: "price_enterprise_monthly", // Placeholder for Stripe
+    razorpayPlanId: "plan_enterprise_monthly", // Placeholder for Razorpay
   },
 });
 ```
 
 2. Link entitlements to the new plan.
 
-3. Create the price in Stripe Dashboard.
+3. Create the price/plan in your payment provider dashboard.
 
-4. Update the Stripe price ID:
+4. Update the payment provider ID:
 
 ```bash
-pnpm stripe:update-price enterprise price_xxxxxxxxxxxxx
+# For Stripe
+node scripts/update-stripe-price.js enterprise price_xxxxxxxxxxxxx
+
+# For Razorpay
+node scripts/update-razorpay-plan.js enterprise plan_xxxxxxxxxxxxx
 ```
 
 5. Update pricing page UI in `/app/pricing/page.tsx`.
 
-## Updating Stripe Price IDs
+## Updating Payment Provider Plan IDs
 
-After creating products in Stripe Dashboard:
+After creating products/plans in your payment provider dashboard:
+
+### Stripe
 
 ```bash
 # Update Pro plan price
-pnpm stripe:update-price pro price_xxxxxxxxxxxxx
+node scripts/update-stripe-price.js pro price_xxxxxxxxxxxxx
 
 # Update Enterprise plan price
-pnpm stripe:update-price enterprise price_xxxxxxxxxxxxx
+node scripts/update-stripe-price.js enterprise price_xxxxxxxxxxxxx
 ```
 
-The script is located at `/scripts/update-stripe-price.js`.
+### Razorpay
+
+```bash
+# Update Pro plan
+node scripts/update-razorpay-plan.js pro plan_xxxxxxxxxxxxx
+
+# Update Enterprise plan
+node scripts/update-razorpay-plan.js enterprise plan_xxxxxxxxxxxxx
+```
+
+The scripts are located at:
+
+- `/scripts/update-stripe-price.js`
+- `/scripts/update-razorpay-plan.js`
 
 ## Seed Order
 
@@ -196,11 +216,17 @@ For production:
 1. Run `prisma db push` to create tables
 2. Run `pnpm db:seed` to create plans and entitlements
 3. **Remove or update** the admin user (don't leave `admin@example.com`)
-4. Update Stripe price IDs with production values
+4. Update payment provider IDs with production values
 
 ```bash
-pnpm stripe:update-price pro price_live_xxxxxxxxxxxxx
+# For Stripe
+node scripts/update-stripe-price.js pro price_live_xxxxxxxxxxxxx
+
+# For Razorpay
+node scripts/update-razorpay-plan.js pro plan_live_xxxxxxxxxxxxx
 ```
+
+See [11-deployment.md](11-deployment.md) for complete production setup guide.
 
 ## Verifying Seed Data
 
@@ -222,12 +248,16 @@ The seed hasn't run. Execute:
 pnpm db:seed
 ```
 
-### "Stripe price ID" Error
+### "Payment Provider ID" Error
 
-The plan has a placeholder Stripe ID. Update it:
+The plan has a placeholder ID. Update it with your actual payment provider ID:
 
 ```bash
-pnpm stripe:update-price pro price_xxxxxxxxxxxxx
+# For Stripe
+node scripts/update-stripe-price.js pro price_xxxxxxxxxxxxx
+
+# For Razorpay
+node scripts/update-razorpay-plan.js pro plan_xxxxxxxxxxxxx
 ```
 
 ### Duplicate Key Error

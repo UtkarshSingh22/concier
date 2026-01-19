@@ -51,10 +51,12 @@ export const StatusMessages = () => {
 
   if (canceled === "true") {
     return (
-      <Alert className="mb-6 border-yellow-200 bg-yellow-50">
-        <XCircle className="h-4 w-4 text-yellow-600" />
-        <AlertTitle className="text-yellow-800">Payment Cancelled</AlertTitle>
-        <AlertDescription className="text-yellow-700">
+      <Alert className="mb-6 border-yellow-200 bg-yellow-50 dark:border-yellow-800 dark:bg-yellow-950">
+        <XCircle className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
+        <AlertTitle className="text-yellow-800 dark:text-yellow-200">
+          Payment Cancelled
+        </AlertTitle>
+        <AlertDescription className="text-yellow-700 dark:text-yellow-300">
           Your payment was cancelled and no charges were made. You can upgrade
           to Pro anytime from the options below.
         </AlertDescription>

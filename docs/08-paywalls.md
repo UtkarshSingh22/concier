@@ -14,7 +14,7 @@ import { requireEntitlement } from "@/lib/auth-utils";
 
 export default async function ProFeaturePage() {
   await requireEntitlement("pro_features"); // Redirects to /pricing if missing
-  
+
   return <ProContent />;
 }
 ```
@@ -30,9 +30,9 @@ export default function Dashboard() {
   return (
     <div>
       <FreeContent />
-      
+
       <FeatureGate entitlement="api_access">
-        <ApiKeyGenerator />  {/* Hidden if user lacks entitlement */}
+        <ApiKeyGenerator /> {/* Hidden if user lacks entitlement */}
       </FeatureGate>
     </div>
   );
@@ -55,8 +55,9 @@ Wraps premium content. Shows upgrade prompt if user lacks entitlement.
 | `children` | ReactNode | Yes | Premium content |
 
 **Example with custom fallback**:
+
 ```tsx
-<FeatureGate 
+<FeatureGate
   entitlement="api_access"
   fallback={<div>Custom locked message</div>}
 >
@@ -66,7 +67,7 @@ Wraps premium content. Shows upgrade prompt if user lacks entitlement.
 
 ### UpgradePrompt
 
-Displays upgrade messaging with Stripe checkout button.
+Displays upgrade messaging with payment checkout button (works with Stripe or Razorpay).
 
 **Location**: `/components/UpgradePrompt.tsx`
 
@@ -79,8 +80,9 @@ Displays upgrade messaging with Stripe checkout button.
 | `buttonText` | string | Custom button text |
 
 **Standalone usage**:
+
 ```tsx
-<UpgradePrompt 
+<UpgradePrompt
   entitlement="pro_features"
   title="Unlock Pro Features"
   description="Get access to advanced tools"
@@ -89,19 +91,18 @@ Displays upgrade messaging with Stripe checkout button.
 
 ### UpgradeButton
 
-Simple button that triggers Stripe checkout.
+Simple button that triggers payment checkout (works with any configured provider).
 
 **Location**: `/components/UpgradeButton.tsx`
 
 ```tsx
-<UpgradeButton planName="pro">
-  Upgrade Now
-</UpgradeButton>
+<UpgradeButton planName="pro">Upgrade Now</UpgradeButton>
 ```
 
 ## Demo Page
 
 See `/app/(protected)/pro-feature/page.tsx` for a working example that shows:
+
 - Gated feature (Advanced Analytics)
 - Free feature (Basic Security Settings)
 
@@ -123,10 +124,12 @@ When adding new entitlements, update this mapping.
 ## Checkout Flow
 
 1. User sees `UpgradePrompt` or clicks `UpgradeButton`
-2. Click triggers `/api/stripe/create-checkout-session`
-3. User redirected to Stripe checkout
+2. Click triggers `/api/payments/checkout` (unified endpoint)
+3. User redirected to payment provider checkout (Stripe or Razorpay)
 4. After payment, webhook updates entitlements
 5. User returns to `/billing?success=true`
+
+**Note**: The checkout flow is provider-agnostic. Switch providers by changing `PAYMENT_PROVIDER` env var. See [03-payments.md](03-payments.md).
 
 ## Adding a New Paywall
 
@@ -153,5 +156,5 @@ When adding new entitlements, update this mapping.
 
 - The entitlement checking logic in `/hooks/use-entitlements.ts`
 - The checkout flow in `UpgradePrompt`
-- The `/api/stripe/create-checkout-session` endpoint
-
+- The `/api/payments/checkout` endpoint (unified payment handler)
+- Payment provider abstraction in `/lib/payments/`

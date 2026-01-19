@@ -1,7 +1,7 @@
 // 🏗️ USER EDITABLE - UPGRADE PROMPT COMPONENT
 // Customize upgrade messaging, styling, and plan mapping.
 // Safe to edit: Copy, design, PLAN_REQUIREMENTS mapping.
-// Keep the Stripe checkout flow logic intact.
+// Keep the payment checkout flow logic intact.
 
 "use client";
 
@@ -59,7 +59,8 @@ export function UpgradePrompt({
     setIsLoading(true);
 
     try {
-      const response = await fetch("/api/stripe/create-checkout-session", {
+      // Use unified payment checkout endpoint (routes to Stripe or Razorpay)
+      const response = await fetch("/api/payments/checkout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -72,7 +73,7 @@ export function UpgradePrompt({
       const data = await response.json();
 
       if (response.ok && data.url) {
-        // Redirect to Stripe checkout
+        // Redirect to payment provider checkout
         window.location.href = data.url;
       } else {
         toast.error(data.error || "Failed to start checkout process");

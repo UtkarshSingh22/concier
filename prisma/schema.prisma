@@ -22,7 +22,6 @@ model User {
 
   // Auth relationships
   accounts Account[]
-  sessions Session[]
 
   // Subscription relationships
   subscriptions Subscription[]
@@ -54,16 +53,6 @@ model Account {
   @@map("accounts")
 }
 
-// NextAuth.js Session model
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("sessions")
-}
 
 // Subscription plans (free, pro, enterprise, etc.)
 model Plan {
@@ -74,7 +63,10 @@ model Plan {
   price       Int      // Price in cents (0 for free)
   interval    String   @default("month") // "month", "year"
   isActive    Boolean  @default(true)
-  stripeId    String?  @unique // Stripe price ID
+  
+  // Payment provider IDs
+  stripePriceId    String?  @unique // Stripe price ID (e.g., "price_xxx")
+  razorpayPlanId   String?  @unique // Razorpay plan ID (e.g., "plan_xxx")
 
   // Relationships
   subscriptions Subscription[]
@@ -88,14 +80,16 @@ model Plan {
 
 // User subscriptions to plans
 model Subscription {
-  id               String            @id @default(cuid())
-  userId           String
-  planId           String
-  stripeId         String?           @unique // Stripe subscription ID
-  status           SubscriptionStatus @default(active)
-  currentPeriodStart DateTime?
-  currentPeriodEnd   DateTime?
-  cancelAtPeriodEnd  Boolean         @default(false)
+  id                     String             @id @default(cuid())
+  userId                 String
+  planId                 String
+  provider               PaymentProvider    @default(stripe) // "stripe" or "razorpay"
+  providerSubscriptionId String?            @unique // Stripe/Razorpay subscription ID
+  providerCustomerId     String?            // Stripe customer ID or Razorpay customer ID
+  status                 SubscriptionStatus @default(active)
+  currentPeriodStart     DateTime?
+  currentPeriodEnd       DateTime?
+  cancelAtPeriodEnd      Boolean            @default(false)
 
   // Relationships
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -105,7 +99,14 @@ model Subscription {
   updatedAt DateTime @updatedAt
 
   @@unique([userId, planId, status]) // User can only have one active subscription per plan type
+  @@index([providerSubscriptionId])
+  @@index([providerCustomerId])
   @@map("subscriptions")
+}
+
+enum PaymentProvider {
+  stripe
+  razorpay
 }
 
 // Features/access rights that plans provide

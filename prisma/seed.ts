@@ -73,7 +73,8 @@ async function main() {
       price: 0,
       interval: "month",
       isActive: true,
-      stripeId: null, // Free plan doesn't need Stripe price ID
+      stripePriceId: null, // Free plan doesn't need payment provider IDs
+      razorpayPlanId: null,
     },
   });
 
@@ -87,7 +88,9 @@ async function main() {
       price: 2900, // $29.00
       interval: "month",
       isActive: true,
-      stripeId: "price_pro_monthly", // Placeholder - user will set actual Stripe price ID
+      // Placeholder IDs - replace with actual IDs from your payment provider dashboards
+      stripePriceId: "price_pro_monthly", // Stripe price ID (e.g., "price_xxx")
+      razorpayPlanId: "plan_pro_monthly", // Razorpay plan ID (e.g., "plan_xxx")
     },
   });
 
@@ -156,8 +159,10 @@ async function main() {
     create: {
       userId: adminUser.id,
       planId: proPlan.id,
+      provider: "stripe", // Default provider
       status: "active",
-      stripeId: "admin_subscription", // Placeholder for admin
+      providerSubscriptionId: "admin_subscription", // Placeholder for admin
+      providerCustomerId: "admin_customer",
       currentPeriodStart: new Date(),
       currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
     },

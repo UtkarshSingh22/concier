@@ -27,6 +27,19 @@ export async function POST(request: NextRequest) {
         );
       }
 
+      // Get user and plan data in single query
+      const { db } = await import("@/lib/db");
+      const user = await db.user.findUnique({
+        where: { email: session.user.email },
+        select: {
+          id: true,
+        },
+      });
+
+      if (!user) {
+        return createErrorResponse("User not found", 404, "USER_NOT_FOUND");
+      }
+
       // Get Stripe price ID for the plan
       const priceId = await getStripePriceId(planName);
       if (!priceId) {
@@ -35,16 +48,6 @@ export async function POST(request: NextRequest) {
           404,
           "PLAN_NOT_FOUND"
         );
-      }
-
-      // Get user ID from database
-      const { db } = await import("@/lib/db");
-      const user = await db.user.findUnique({
-        where: { email: session.user.email },
-      });
-
-      if (!user) {
-        return createErrorResponse("User not found", 404, "USER_NOT_FOUND");
       }
 
       // Create checkout session

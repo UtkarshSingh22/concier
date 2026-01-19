@@ -1,6 +1,6 @@
 # Your SaaS Boilerplate
 
-A production-ready Next.js 14 SaaS boilerplate with authentication, billing, and payments.
+A production-ready Next.js 14 SaaS boilerplate with authentication, billing, and multi-provider payments.
 
 ## Quick Start (10 minutes)
 
@@ -16,10 +16,13 @@ Edit `.env` and add your API keys:
 - `AUTH_SECRET` - Generate a random 32+ character string
 - `NEXTAUTH_URL` - Your app URL (http://localhost:3000 for dev)
 - `GOOGLE_CLIENT_ID` & `GOOGLE_CLIENT_SECRET` - From Google Cloud Console
-- `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` & `STRIPE_PUBLISHABLE_KEY` - From Stripe Dashboard
 - `RESEND_API_KEY` - From Resend Dashboard
 - `EMAIL_FROM` - Your sender email (e.g., noreply@yourdomain.com)
 - `NEXT_PUBLIC_APP_URL` - Your public app URL (same as NEXTAUTH_URL)
+- **Payment Provider** (choose one):
+  - Stripe: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PUBLISHABLE_KEY`
+  - Razorpay: `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, `RAZORPAY_WEBHOOK_SECRET`
+- `PAYMENT_PROVIDER` - Set to `stripe` or `razorpay` (defaults to stripe)
 
 See [docs/13-environment-variables.md](docs/13-environment-variables.md) for detailed instructions.
 
@@ -37,14 +40,28 @@ pnpm install
 pnpm db:setup
 ```
 
-### 3. Configure Stripe
+### 3. Configure Payment Provider
+
+**Option A: Stripe (Default)**
 
 1. Create a product in [Stripe Dashboard](https://dashboard.stripe.com/) → Products
 2. Add a monthly price (e.g., $29/month)
 3. Copy the Price ID and run:
    ```bash
-   pnpm stripe:update-price pro price_xxxxxxxxxxxxx
+   node scripts/update-stripe-price.js pro price_xxxxxxxxxxxxx
    ```
+
+**Option B: Razorpay**
+
+1. Create a plan in [Razorpay Dashboard](https://dashboard.razorpay.com/) → Subscriptions → Plans
+2. Set billing cycle and amount
+3. Copy the Plan ID and run:
+   ```bash
+   node scripts/update-razorpay-plan.js pro plan_xxxxxxxxxxxxx
+   ```
+4. Set `PAYMENT_PROVIDER=razorpay` in `.env`
+
+See [docs/03-payments.md](docs/03-payments.md) for complete payment provider setup.
 
 ### 4. Start Development
 
@@ -67,7 +84,8 @@ Open [http://localhost:3000](http://localhost:3000)
 | -------------------- | -------- | ----------------------------------------------- |
 | Google OAuth         | ✅ Ready | [01-auth.md](docs/01-auth.md)                   |
 | Magic Links          | ✅ Ready | [01-auth.md](docs/01-auth.md)                   |
-| Stripe Subscriptions | ✅ Ready | [03-stripe.md](docs/03-stripe.md)               |
+| Subscriptions        | ✅ Ready | [03-payments.md](docs/03-payments.md)           |
+| Stripe & Razorpay    | ✅ Ready | [03-payments.md](docs/03-payments.md)           |
 | Plans & Entitlements | ✅ Ready | [04-entitlements.md](docs/04-entitlements.md)   |
 | Email System         | ✅ Ready | [05-email.md](docs/05-email.md)                 |
 | Landing Pages        | ✅ Ready | [07-landing-pages.md](docs/07-landing-pages.md) |
@@ -76,6 +94,7 @@ Open [http://localhost:3000](http://localhost:3000)
 | SEO                  | ✅ Ready | [06-seo.md](docs/06-seo.md)                     |
 | Database             | ✅ Ready | [02-database.md](docs/02-database.md)           |
 | Dark Mode            | ✅ Ready | [15-theme.md](docs/15-theme.md)                 |
+| AI Infrastructure    | ✅ Ready | [16-ai-setup.md](docs/16-ai-setup.md)           |
 
 ## Project Structure
 
@@ -172,7 +191,10 @@ pnpm dev              # Start development server
 pnpm build            # Build for production
 pnpm db:setup         # Setup database (generate + push + seed)
 pnpm db:studio        # Open Prisma Studio
-pnpm stripe:update-price pro price_xxx  # Update Stripe price ID
+
+# Update payment provider plan IDs
+node scripts/update-stripe-price.js pro price_xxx      # Stripe
+node scripts/update-razorpay-plan.js pro plan_xxx      # Razorpay
 ```
 
 ## Documentation
@@ -182,7 +204,7 @@ Full documentation is in the `/docs` folder:
 - [00-overview.md](docs/00-overview.md) - Project overview
 - [01-auth.md](docs/01-auth.md) - Authentication system
 - [02-database.md](docs/02-database.md) - Database schema
-- [03-stripe.md](docs/03-stripe.md) - Stripe integration
+- [03-payments.md](docs/03-payments.md) - Payment integration quick start
 - [04-entitlements.md](docs/04-entitlements.md) - Feature gating
 - [05-email.md](docs/05-email.md) - Email system
 - [06-seo.md](docs/06-seo.md) - SEO configuration
@@ -195,6 +217,7 @@ Full documentation is in the `/docs` folder:
 - [13-environment-variables.md](docs/13-environment-variables.md) - All env vars
 - [14-error-tracking.md](docs/14-error-tracking.md) - Error tracking (optional)
 - [15-theme.md](docs/15-theme.md) - Dark mode & theming
+- [16-ai-setup.md](docs/16-ai-setup.md) - AI infrastructure (optional)
 
 ## Deployment
 
@@ -211,9 +234,10 @@ See [11-deployment.md](docs/11-deployment.md) for detailed instructions.
 - **Language**: TypeScript
 - **Database**: PostgreSQL + Prisma
 - **Auth**: NextAuth.js v4
-- **Payments**: Stripe
+- **Payments**: Stripe & Razorpay (switchable)
 - **Email**: Resend
 - **Styling**: Tailwind CSS + shadcn/ui
+- **AI**: OpenAI, Anthropic, Gemini (optional)
 - **Error Tracking**: Sentry (optional)
 
 ## Support

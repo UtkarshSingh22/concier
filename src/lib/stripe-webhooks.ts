@@ -35,7 +35,7 @@ export async function handleInvoicePaid(invoice: Stripe.Invoice) {
       await db.subscription.updateMany({
         where: {
           userId: account.userId,
-          stripeId: invoice.subscription as string,
+          providerSubscriptionId: invoice.subscription as string,
         },
         data: {
           status: "active",
@@ -56,8 +56,8 @@ export async function handleSubscriptionUpdated(
   subscription: Stripe.Subscription
 ) {
   // Find user by subscription
-  const dbSubscription = await db.subscription.findUnique({
-    where: { stripeId: subscription.id },
+  const dbSubscription = await db.subscription.findFirst({
+    where: { providerSubscriptionId: subscription.id },
   });
 
   if (dbSubscription) {
@@ -82,8 +82,8 @@ export async function handleSubscriptionDeleted(
   subscription: Stripe.Subscription
 ) {
   // Find and update subscription in database
-  const dbSubscription = await db.subscription.findUnique({
-    where: { stripeId: subscription.id },
+  const dbSubscription = await db.subscription.findFirst({
+    where: { providerSubscriptionId: subscription.id },
   });
 
   if (dbSubscription) {

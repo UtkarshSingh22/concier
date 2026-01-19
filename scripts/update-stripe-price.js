@@ -16,13 +16,13 @@ async function updateStripePrice(planName, priceId) {
 
     const plan = await prisma.plan.update({
       where: { name: planName },
-      data: { stripeId: priceId },
+      data: { stripePriceId: priceId },
     });
 
     console.log("✅ Successfully updated plan:");
     console.log(`   Name: ${plan.name}`);
     console.log(`   Display Name: ${plan.displayName}`);
-    console.log(`   Stripe ID: ${plan.stripeId}`);
+    console.log(`   Stripe Price ID: ${plan.stripePriceId}`);
     console.log(`   Price: $${plan.price / 100}/${plan.interval}`);
   } catch (error) {
     console.error("❌ Error updating plan:", error.message);

@@ -121,29 +121,29 @@ export default function ProductPageClient() {
         <div className="p-4 rounded-lg border bg-card">
           <h3 className="text-sm font-medium text-card-foreground mb-2">
             Test Email System
-          </h3>
+        </h3>
           <p className="text-sm text-muted-foreground mb-3">
-            Send yourself a welcome email to test the email system.
-          </p>
-          <Button
-            onClick={handleSendWelcomeEmail}
-            disabled={isSendingEmail}
+          Send yourself a welcome email to test the email system.
+        </p>
+        <Button
+          onClick={handleSendWelcomeEmail}
+          disabled={isSendingEmail}
             variant="outline"
             size="sm"
-          >
-            {isSendingEmail ? "Sending..." : "Send Welcome Email"}
-          </Button>
-        </div>
+        >
+          {isSendingEmail ? "Sending..." : "Send Welcome Email"}
+        </Button>
+      </div>
 
         <div className="p-4 rounded-lg border bg-card">
           <h3 className="text-sm font-medium text-card-foreground mb-2">
             Build Your Product
-          </h3>
+        </h3>
           <p className="text-sm text-muted-foreground">
-            This is where you implement your SaaS features. Add your dashboard,
-            API routes, and UI components in the /product directory.
-          </p>
-        </div>
+          This is where you implement your SaaS features. Add your dashboard,
+          API routes, and UI components in the /product directory.
+        </p>
+      </div>
       </div>
 
       {/* Example / testing component — safe to remove */}
