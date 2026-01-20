@@ -127,6 +127,57 @@ await aiClient.generate({ prompt: "Hello", provider: "gemini" }, { userId });
 
 If no provider is specified, the system uses the first available in order: OpenAI → Anthropic → Gemini.
 
+## Changing Models
+
+### Default Models
+
+Each provider has a default model configured in its implementation file:
+
+```typescript
+// lib/ai/providers/openai.ts
+const DEFAULT_CONFIG = {
+  defaultModel: "gpt-4o-mini", // ← Change this
+  defaultMaxTokens: 1024,
+  defaultTemperature: 0.7,
+  timeoutMs: AI_LIMITS.DEFAULT_TIMEOUT_MS,
+};
+```
+
+```typescript
+// lib/ai/providers/anthropic.ts
+const DEFAULT_CONFIG = {
+  defaultModel: "claude-3-5-sonnet-20241022", // ← Change this
+  defaultMaxTokens: 1024,
+  defaultTemperature: 0.7,
+  timeoutMs: AI_LIMITS.DEFAULT_TIMEOUT_MS,
+};
+```
+
+```typescript
+// lib/ai/providers/gemini.ts
+const DEFAULT_CONFIG = {
+  defaultModel: "gemini-1.5-flash", // ← Change this
+  defaultMaxTokens: 1024,
+  defaultTemperature: 0.7,
+  timeoutMs: AI_LIMITS.DEFAULT_TIMEOUT_MS,
+};
+```
+
+### Override Models Per Request
+
+Pass the `model` parameter to use a different model for a specific request:
+
+```typescript
+// Use specific model for this request
+const response = await aiClient.generate(
+  {
+    prompt: "Hello",
+    model: "gpt-4o", // Override default gpt-4o-mini
+  },
+  { userId: "user_123" }
+);
+```
+
 Via API:
 
 ```bash
