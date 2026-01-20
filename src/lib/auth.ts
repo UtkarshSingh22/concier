@@ -11,6 +11,7 @@ import { db } from "@/lib/db";
 // Environment variables are validated at runtime when needed
 
 export const authOptions: NextAuthOptions = {
+  secret: process.env.AUTH_SECRET,
   adapter: PrismaAdapter(db) as any,
   providers: [
     GoogleProvider({
