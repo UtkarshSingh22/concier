@@ -446,25 +446,6 @@ To switch from Stripe to Razorpay:
 
 **No frontend code changes required!** The abstraction layer handles everything.
 
-## Webhook Security
-
-Both providers require webhook signature verification:
-
-### Stripe
-
-Uses `stripe.webhooks.constructEvent()` with `STRIPE_WEBHOOK_SECRET`.
-
-### Razorpay
-
-Uses HMAC-SHA256 verification with `RAZORPAY_WEBHOOK_SECRET`:
-
-```typescript
-const expectedSignature = crypto
-  .createHmac("sha256", webhookSecret)
-  .update(payload)
-  .digest("hex");
-```
-
 ## Testing
 
 ### Stripe Test Mode
@@ -492,152 +473,7 @@ Test card: `5500 6700 0000 1002`
 
 **Webhook testing:**
 
-## Testing Razorpay on Localhost
-
-To test Razorpay webhooks and checkout flow locally, you need to expose your localhost to the internet using ngrok. This allows Razorpay to send webhook events to your local development server.
-
-### 1. Install ngrok
-
-#### macOS (using Homebrew):
-
-```bash
-brew install ngrok/ngrok/ngrok
-```
-
-#### Windows/Linux:
-
-```bash
-# Download from: https://ngrok.com/download
-# Or using npm (if you have Node.js installed):
-npm install -g ngrok
-```
-
-### 2. Authenticate ngrok
-
-Get your auth token from [ngrok dashboard](https://dashboard.ngrok.com/get-started/your-authtoken):
-
-```bash
-ngrok config add-authtoken YOUR_AUTH_TOKEN
-```
-
-### 3. Start Your Development Server
-
-Make sure your Next.js app is running:
-
-```bash
-npm run dev
-# or
-pnpm dev
-```
-
-Your app should be running on `http://localhost:3000`.
-
-### 4. Start ngrok
-
-Expose your localhost to the internet:
-
-```bash
-# Forward port 3000 (where your Next.js app runs)
-ngrok http 3000
-```
-
-You'll see output like:
-
-```
-ngrok
-Session Status                online
-Account                       your-email@example.com (Plan: Free)
-Version                       3.x.x
-Region                        United States (us)
-Latency                       -
-Web Interface                 http://127.0.0.1:4040
-Forwarding                    http://abc123.ngrok.io -> http://localhost:3000
-Forwarding                    https://abc123.ngrok.io -> http://localhost:3000
-```
-
-**Important:** Copy the `https://abc123.ngrok.io` URL - you'll need this for Razorpay configuration.
-
-### 5. Create Webhook Secret & Configure Webhook
-
-#### Step 1: Generate Webhook Secret
-
-**Important:** Unlike Stripe (where the webhook secret is auto-generated), you must create your own webhook secret for Razorpay.
-
-**Generate a secure random secret:**
-
-```bash
-# Option 1: Use openssl (macOS/Linux)
-openssl rand -hex 32
-
-# Option 2: Use Node.js
-node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-
-# Option 3: Use Python
-python3 -c "import secrets; print(secrets.token_hex(32))"
-
-# Option 4: Use an online generator (64+ characters recommended)
-# https://www.random.org/strings/?num=1&len=64&digits=on&upperalpha=on&loweralpha=on&unique=on&format=html&rnd=new
-```
-
-**Save this secret securely** - you'll need it for both Razorpay Dashboard and your `.env` file.
-
-#### Step 2: Create Webhook in Razorpay
-
-1. In Razorpay Dashboard, go to **Settings** → **Webhooks**
-2. Click **"Add New Webhook"**
-3. Set **Webhook URL** to: `https://your-ngrok-url.ngrok.io/api/payments/webhook/razorpay`
-   - Replace `your-ngrok-url` with your actual ngrok URL
-4. Set **Secret** to the random secret you generated in Step 1
-5. Select **Active Events**:
-   - `subscription.activated`
-   - `subscription.charged`
-   - `subscription.cancelled`
-   - `subscription.paused`
-   - `subscription.resumed`
-   - `payment.failed`
-6. Click **"Create Webhook"**
-
-### 6. Update Environment Variables
-
-Add the webhook secret you generated in Step 1 to your `.env` file:
-
-```bash
-# Use the same secret you generated and entered in Razorpay Dashboard
-RAZORPAY_WEBHOOK_SECRET=your_random_generated_secret_here
-```
-
-### 7. Test the Flow
-
-1. **Restart your development server** to pick up the new environment variable
-2. **Visit your app** and try to purchase a subscription
-3. **Complete the payment** using Razorpay test credentials
-4. **Check ngrok logs** - you should see webhook requests coming in
-5. **Verify subscription** - check your database or billing page to confirm the subscription was created
-
-### Troubleshooting
-
-#### Webhook Events Not Received:
-
-- Check ngrok is still running: `http://127.0.0.1:4040`
-- Verify webhook URL in Razorpay Dashboard is correct
-- Check ngrok logs for any errors
-- Ensure `RAZORPAY_WEBHOOK_SECRET` is set correctly
-
-#### Payment Page Not Loading:
-
-- Verify ngrok tunnel is active
-- Check browser console for JavaScript errors
-- Ensure Razorpay keys are configured correctly
-
-#### ngrok Not Working:
-
-- Try a different region: `ngrok http 3000 --region=us`
-- Check your internet connection
-- Verify ngrok auth token is correct
-
-### Security Note
-
-⚠️ **Never commit ngrok URLs or webhook secrets to version control.** Always use environment variables and add them to `.gitignore`.
+See [payment-setup.md](payment-setup.md) for webhook configuration instructions.
 
 ## Migration from Old Stripe-Only Setup
 
@@ -706,10 +542,7 @@ node scripts/update-razorpay-plan.js pro plan_xxxxx
 
 ### Webhook Not Triggering
 
-1. Verify webhook URL is correct
-2. Check webhook secret matches
-3. Ensure events are selected in provider dashboard
-4. Check server logs for signature verification errors
+Ensure webhooks are properly configured following the [payment setup guide](payment-setup.md).
 
 **Stripe:**
 
@@ -723,9 +556,7 @@ node scripts/update-razorpay-plan.js pro plan_xxxxx
 
 ### "Invalid signature" Error
 
-1. Verify webhook secret is correct
-2. Ensure raw body is passed to verification (not parsed JSON)
-3. Check for proxy/middleware that might modify the request body
+Verify webhook secret matches what was set during [payment setup](payment-setup.md).
 
 ### Razorpay Checkout Not Opening
 

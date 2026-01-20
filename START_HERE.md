@@ -66,7 +66,16 @@ pnpm install
 # 4. Setup database
 pnpm db:setup
 
-# 5. Start development
+# 5. (Optional) Setup payments
+# All core features work after completing the Quick Setup steps above.
+# Payments will not work by default - complete this step to enable them.
+#
+# Choose one payment provider (Stripe or Razorpay), create a subscription plan,
+# and save the Plan ID in the database.
+#
+# See docs/payment-setup.md for step-by-step instructions.
+
+# 6. Start development
 pnpm dev
 ```
 
@@ -116,6 +125,7 @@ export async function GET() {
 
 - [Authentication & sessions](docs/auth.md)
 - [Database & data access](docs/database.md)
+- [Payment setup](docs/payment-setup.md)
 - [Payments & billing](docs/payments.md)
 - [Feature gating](docs/entitlements.md)
 - [UI components](docs/ui-components.md)
