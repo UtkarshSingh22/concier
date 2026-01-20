@@ -1,4 +1,4 @@
-# Scaffold
+# ZeroDrag
 
 A Next.js application starter with authentication, payments, and AI infrastructure.
 

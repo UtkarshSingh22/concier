@@ -12,7 +12,7 @@ import { db } from "@/lib/db";
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.AUTH_SECRET,
-  adapter: PrismaAdapter(db) as any,
+  adapter: PrismaAdapter(db),
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -62,10 +62,10 @@ export const authOptions: NextAuthOptions = {
     error: "/auth",
   },
   callbacks: {
-    session: async ({ session, token }: any) => {
+    session: async ({ session, token }) => {
       // Add user ID to session from JWT token
       if (session?.user && token?.sub) {
-        session.user.id = token.sub;
+        (session.user as { id?: string }).id = token.sub;
       }
       return session;
     },

@@ -13,6 +13,10 @@ import {
   handlePaymentFailed,
 } from "@/lib/webhooks/razorpay";
 import { logger } from "@/lib/logger";
+import type {
+  RazorpaySubscriptionPayload,
+  RazorpayPaymentPayload,
+} from "@/lib/webhooks/razorpay";
 
 export async function POST(request: NextRequest) {
   const body = await request.text();
@@ -33,30 +37,30 @@ export async function POST(request: NextRequest) {
       context: "razorpay-webhook",
     });
 
-    // Route to appropriate handler
+    // Route to appropriate handler based on event type
     switch (event.type) {
       case "subscription.activated":
-        await handleSubscriptionActivated(event.data as any);
+        await handleSubscriptionActivated(event.data as RazorpaySubscriptionPayload);
         break;
 
       case "subscription.charged":
-        await handleSubscriptionCharged(event.data as any);
+        await handleSubscriptionCharged(event.data as RazorpaySubscriptionPayload);
         break;
 
       case "subscription.cancelled":
-        await handleSubscriptionCancelled(event.data as any);
+        await handleSubscriptionCancelled(event.data as RazorpaySubscriptionPayload);
         break;
 
       case "subscription.paused":
-        await handleSubscriptionPaused(event.data as any);
+        await handleSubscriptionPaused(event.data as RazorpaySubscriptionPayload);
         break;
 
       case "subscription.resumed":
-        await handleSubscriptionResumed(event.data as any);
+        await handleSubscriptionResumed(event.data as RazorpaySubscriptionPayload);
         break;
 
       case "payment.failed":
-        await handlePaymentFailed(event.data as any);
+        await handlePaymentFailed(event.data as RazorpayPaymentPayload);
         break;
 
       default:
@@ -67,7 +71,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ received: true });
   } catch (error) {
-    logger.error("Razorpay webhook error", error as Error, {
+    logger.error(error as Error, {
       context: "razorpay-webhook",
     });
 

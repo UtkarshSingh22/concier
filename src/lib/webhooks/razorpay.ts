@@ -10,7 +10,7 @@ import type { SubscriptionStatus } from "@prisma/client";
 /**
  * Razorpay subscription payload from webhook
  */
-interface RazorpaySubscriptionPayload {
+export interface RazorpaySubscriptionPayload {
   subscription: {
     entity: {
       id: string;
@@ -32,7 +32,7 @@ interface RazorpaySubscriptionPayload {
 /**
  * Razorpay payment payload from webhook
  */
-interface RazorpayPaymentPayload {
+export interface RazorpayPaymentPayload {
   payment: {
     entity: {
       id: string;

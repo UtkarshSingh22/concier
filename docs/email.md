@@ -1,6 +1,6 @@
 # Email System
 
-Scaffold uses Resend for transactional emails with React-based templates.
+ZeroDrag uses Resend for transactional emails with React-based templates.
 
 ## Email Types
 

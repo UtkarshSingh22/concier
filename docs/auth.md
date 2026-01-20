@@ -1,6 +1,6 @@
 # Authentication
 
-Scaffold uses NextAuth.js v4 with two authentication methods:
+ZeroDrag uses NextAuth.js v4 with two authentication methods:
 
 1. **Google OAuth** - One-click sign-in
 2. **Magic Links** - Passwordless email authentication via Resend

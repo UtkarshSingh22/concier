@@ -2,7 +2,7 @@
 
 ## Overview
 
-Scaffold includes a **professional dark mode** using shadcn/ui's token-based theming. The theme system is production-ready with:
+ZeroDrag includes a **professional dark mode** using shadcn/ui's token-based theming. The theme system is production-ready with:
 
 - **CSS variables** - No hardcoded colors
 - **Automatic adaptation** - All components respond to theme changes

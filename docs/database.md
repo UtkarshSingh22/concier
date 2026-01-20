@@ -1,6 +1,6 @@
 # Database
 
-Scaffold uses PostgreSQL with Prisma ORM.
+ZeroDrag uses PostgreSQL with Prisma ORM.
 
 ## Schema Overview
 

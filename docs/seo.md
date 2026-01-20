@@ -1,6 +1,6 @@
 # SEO
 
-Scaffold includes SEO utilities for metadata, sitemaps, and robots.txt.
+ZeroDrag includes SEO utilities for metadata, sitemaps, and robots.txt.
 
 ## Key Files
 

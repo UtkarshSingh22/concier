@@ -1,6 +1,6 @@
 # Landing Pages
 
-Scaffold includes a complete landing page system with modular sections.
+ZeroDrag includes a complete landing page system with modular sections.
 
 ## Pages
 

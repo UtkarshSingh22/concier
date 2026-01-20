@@ -1,6 +1,6 @@
 # Error Tracking with Sentry
 
-Scaffold includes Sentry for production error tracking and monitoring.
+ZeroDrag includes Sentry for production error tracking and monitoring.
 
 ## What Sentry Tracks
 

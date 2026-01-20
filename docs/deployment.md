@@ -1,6 +1,6 @@
 # Deployment
 
-Scaffold is ready for deployment to Vercel.
+ZeroDrag is ready for deployment to Vercel.
 
 ## Prerequisites
 
