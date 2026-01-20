@@ -1,4 +1,4 @@
-// Core boilerplate UI component (shadcn/ui)
+// Core UI component (shadcn/ui)
 // Modify only if you know what you're doing
 
 import * as React from "react";

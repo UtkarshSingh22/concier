@@ -79,10 +79,10 @@ export interface SEODefaults {
  * @customize Change siteName, description, and social handles to match your brand
  */
 export const seoDefaults: SEODefaults = {
-  siteName: "Your SaaS",
+  siteName: process.env.NEXT_PUBLIC_APP_NAME || "Your SaaS",
   title: {
-    default: "Your SaaS",
-    template: "%s | Your SaaS",
+    default: process.env.NEXT_PUBLIC_APP_NAME || "Your SaaS",
+    template: `%s | ${process.env.NEXT_PUBLIC_APP_NAME || "Your SaaS"}`,
   },
   description:
     "Streamline your workflow with our professional SaaS platform designed for modern teams.",
@@ -91,7 +91,7 @@ export const seoDefaults: SEODefaults = {
     url: "/og-image.jpg", // Add this image to your public folder (1200x630px recommended)
     width: 1200,
     height: 630,
-    alt: "Your SaaS",
+    alt: process.env.NEXT_PUBLIC_APP_NAME || "Your SaaS",
   },
   twitter: {
     handle: "@yourhandle", // Replace with your Twitter handle

@@ -1,4 +1,4 @@
-# Your SaaS Boilerplate
+# Scaffold
 
 A production-ready Next.js 14 SaaS boilerplate with authentication, billing, and multi-provider payments.
 

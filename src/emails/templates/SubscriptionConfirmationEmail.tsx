@@ -14,6 +14,7 @@ interface SubscriptionConfirmationEmailProps {
   planName: string;
   amount: string;
   nextBillingDate: string;
+  appName?: string;
 }
 
 export const SubscriptionConfirmationEmail = ({
@@ -21,6 +22,7 @@ export const SubscriptionConfirmationEmail = ({
   planName,
   amount,
   nextBillingDate,
+  appName = process.env.NEXT_PUBLIC_APP_NAME || "Your SaaS App",
 }: SubscriptionConfirmationEmailProps) => {
   return (
     <Html>
@@ -62,13 +64,14 @@ export const SubscriptionConfirmationEmail = ({
 
             <Text style={paragraph}>
               If you have any questions about your subscription or need
-              assistance, please don&apos;t hesitate to contact our support team.
+              assistance, please don&apos;t hesitate to contact our support
+              team.
             </Text>
 
             <Text style={paragraph}>
               Thank you for choosing us!
               <br />
-              The Your SaaS App Team
+              The {appName} Team
             </Text>
           </Section>
 

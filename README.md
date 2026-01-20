@@ -1,4 +1,4 @@
-# SaaS Boilerplate
+# Scaffold
 
 Production-ready SaaS boilerplate for serious indie hackers.
 
@@ -21,7 +21,7 @@ Open [localhost:3000](http://localhost:3000) → Login → Upgrade → **First p
 
 ## 📁 Folder Structure
 
-### DO NOT TOUCH (boilerplate handles these)
+### DO NOT TOUCH (Scaffold handles these)
 
 - `/auth` - Authentication pages
 - `/billing` - Billing management
@@ -91,7 +91,7 @@ Open [localhost:3000](http://localhost:3000) → Login → Upgrade → **First p
 **Shipping > teaching**
 **Confidence > customization**
 
-This boilerplate handles everything around your product. You build the product itself.
+Scaffold handles everything around your product. You build the product itself.
 
 ## 🚀 Deploy
 

@@ -47,7 +47,7 @@ export function LandingNav() {
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-2">
               <span className="text-xl font-bold text-foreground">
-                Your SaaS
+                {process.env.NEXT_PUBLIC_APP_NAME || "Your SaaS"}
               </span>
             </Link>
 

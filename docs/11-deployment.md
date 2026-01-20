@@ -1,6 +1,6 @@
 # Deployment
 
-The boilerplate is ready for deployment to Vercel.
+Scaffold is ready for deployment to Vercel.
 
 ## Prerequisites
 

@@ -1,6 +1,6 @@
 # Email System
 
-The boilerplate uses Resend for transactional emails with React-based templates.
+Scaffold uses Resend for transactional emails with React-based templates.
 
 ## Email Types
 

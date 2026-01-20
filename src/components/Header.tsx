@@ -44,7 +44,7 @@ const Header = () => {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link href="/product" className="text-xl font-bold text-foreground">
-              Your SaaS
+              {process.env.NEXT_PUBLIC_APP_NAME || "Your SaaS"}
             </Link>
           </div>
 

@@ -1,6 +1,6 @@
 # Error Tracking with Sentry
 
-The boilerplate includes Sentry for production error tracking and monitoring.
+Scaffold includes Sentry for production error tracking and monitoring.
 
 ## What Sentry Tracks
 

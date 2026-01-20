@@ -21,7 +21,7 @@ export const metadata: Metadata = createHomeMetadata({
         url: "/og-homepage.jpg", // Add this image to your public folder
         width: 1200,
         height: 630,
-        alt: "Your SaaS - Streamline your workflow with our professional platform",
+        alt: `${process.env.NEXT_PUBLIC_APP_NAME} - Streamline your workflow with our professional platform`,
       },
     ],
   },
@@ -43,7 +43,7 @@ const Home = () => {
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
               <p className="text-muted-foreground text-sm">
-                © 2024 Your SaaS. All rights reserved.
+                © 2026 {process.env.NEXT_PUBLIC_APP_NAME}. All rights reserved.
               </p>
             </div>
             <div className="flex space-x-6">

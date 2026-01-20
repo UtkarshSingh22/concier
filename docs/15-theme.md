@@ -2,7 +2,7 @@
 
 ## Overview
 
-This boilerplate includes a **professional dark mode** using shadcn/ui's token-based theming. The theme system is production-ready with:
+Scaffold includes a **professional dark mode** using shadcn/ui's token-based theming. The theme system is production-ready with:
 
 - **CSS variables** - No hardcoded colors
 - **Automatic adaptation** - All components respond to theme changes

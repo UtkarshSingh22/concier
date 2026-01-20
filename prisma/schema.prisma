@@ -1,5 +1,5 @@
 // 🔒 CORE SYSTEM - DO NOT MODIFY
-// This is the database schema for the SaaS boilerplate.
+// This is the database schema.
 // Users should NOT edit this file. The schema ensures subscription and entitlement logic.
 
 generator client {

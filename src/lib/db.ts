@@ -1,5 +1,5 @@
 // 🔒 CORE SYSTEM - DO NOT MODIFY
-// Database client setup for the SaaS boilerplate.
+// Database client setup.
 // This provides the Prisma client instance used throughout the application.
 
 import { PrismaClient } from "@prisma/client";

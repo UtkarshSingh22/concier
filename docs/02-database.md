@@ -1,6 +1,6 @@
 # Database
 
-The boilerplate uses PostgreSQL with Prisma ORM.
+Scaffold uses PostgreSQL with Prisma ORM.
 
 ## Schema Overview
 

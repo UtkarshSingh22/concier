@@ -59,7 +59,8 @@ export function CallToAction() {
             {/* Badge */}
             <div className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 px-6 py-3 text-sm font-medium text-white mb-8">
               <Zap className="h-5 w-5" />
-              Join 10,000+ Teams Already Using Your SaaS
+              Join 10,000+ Teams Already Using{" "}
+              {process.env.NEXT_PUBLIC_APP_NAME || "Your SaaS"}
             </div>
 
             {/* Main headline */}

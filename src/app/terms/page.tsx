@@ -31,8 +31,10 @@ const TermsPage = () => {
                   Acceptance of Terms
                 </h2>
                 <p className="mt-4">
-                  By accessing and using Your SaaS, you accept and agree to be
-                  bound by the terms and provision of this agreement.
+                  By accessing and using{" "}
+                  {process.env.NEXT_PUBLIC_APP_NAME || "Your SaaS"}, you accept
+                  and agree to be bound by the terms and provision of this
+                  agreement.
                 </p>
               </section>
 
@@ -41,9 +43,10 @@ const TermsPage = () => {
                   Use License
                 </h2>
                 <p className="mt-4">
-                  Permission is granted to temporarily use Your SaaS for
-                  personal and business use. This is the grant of a license, not
-                  a transfer of title.
+                  Permission is granted to temporarily use{" "}
+                  {process.env.NEXT_PUBLIC_APP_NAME || "Your SaaS"} for personal
+                  and business use. This is the grant of a license, not a
+                  transfer of title.
                 </p>
               </section>
 
@@ -73,8 +76,10 @@ const TermsPage = () => {
                   Limitation of Liability
                 </h2>
                 <p className="mt-4">
-                  In no event shall Your SaaS be liable for any damages arising
-                  out of the use or inability to use our services.
+                  In no event shall{" "}
+                  {process.env.NEXT_PUBLIC_APP_NAME || "Your SaaS"} be liable
+                  for any damages arising out of the use or inability to use our
+                  services.
                 </p>
               </section>
 

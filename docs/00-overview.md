@@ -71,7 +71,7 @@ All your custom code goes in:
 - `/components/product/` - Your UI components
 - Add new API routes in `/app/api/`
 
-The boilerplate handles authentication, billing, and infrastructure. You focus on building features.
+Scaffold handles authentication, billing, and infrastructure. You focus on building features.
 
 ## Tech Stack
 

@@ -1,6 +1,6 @@
 // 🏗️ USER EDITABLE - BUILD YOUR PRODUCT HERE
 // This is YOUR code. Everything in /product is for you to customize.
-// The boilerplate handles auth, billing, and payments - you build the product.
+// This handles auth, billing, and payments - you build the product.
 
 import type { Metadata } from "next";
 import { Suspense } from "react";

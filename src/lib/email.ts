@@ -17,7 +17,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export const EMAIL_CONFIG = {
   from: {
     email: process.env.EMAIL_FROM,
-    name: "Your SaaS App",
+    name: process.env.NEXT_PUBLIC_APP_NAME || "Your SaaS App",
   },
 } as const;
 
@@ -91,9 +91,13 @@ export const EmailService = {
 
       return sendEmail({
         to,
-        subject: "Welcome to Your SaaS App! 🎉",
+        subject: `Welcome to ${process.env.NEXT_PUBLIC_APP_NAME || "Your SaaS App"}! 🎉`,
         template: WelcomeEmail,
-        templateProps: { userName, loginUrl },
+        templateProps: {
+          userName,
+          loginUrl,
+          appName: process.env.NEXT_PUBLIC_APP_NAME || "Your SaaS App",
+        },
       });
     } catch (error) {
       console.error("❌ Failed to load WelcomeEmail template:", error);
@@ -125,7 +129,13 @@ export const EmailService = {
       to,
       subject: `Subscription Confirmed - ${planName}`,
       template: SubscriptionConfirmationEmail,
-      templateProps: { userName, planName, amount, nextBillingDate },
+      templateProps: {
+        userName,
+        planName,
+        amount,
+        nextBillingDate,
+        appName: process.env.NEXT_PUBLIC_APP_NAME || "Your SaaS App",
+      },
     });
   },
 
@@ -150,7 +160,13 @@ export const EmailService = {
       to,
       subject: "Payment Failed - Action Required",
       template: PaymentFailedEmail,
-      templateProps: { userName, amount, failureReason, retryUrl },
+      templateProps: {
+        userName,
+        amount,
+        failureReason,
+        retryUrl,
+        appName: process.env.NEXT_PUBLIC_APP_NAME || "Your SaaS App",
+      },
     });
   },
 

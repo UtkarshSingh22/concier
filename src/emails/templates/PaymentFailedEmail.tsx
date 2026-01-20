@@ -14,6 +14,7 @@ interface PaymentFailedEmailProps {
   amount: string;
   failureReason: string;
   retryUrl: string;
+  appName?: string;
 }
 
 export const PaymentFailedEmail = ({
@@ -21,6 +22,7 @@ export const PaymentFailedEmail = ({
   amount,
   failureReason,
   retryUrl,
+  appName = process.env.NEXT_PUBLIC_APP_NAME || "Your SaaS App",
 }: PaymentFailedEmailProps) => {
   return (
     <Html>
@@ -36,7 +38,8 @@ export const PaymentFailedEmail = ({
 
             <Text style={paragraph}>
               We were unable to process your payment of {amount}. This can
-              happen for several reasons, and we&apos;ve included the details below.
+              happen for several reasons, and we&apos;ve included the details
+              below.
             </Text>
 
             <Section style={errorDetails}>
@@ -64,7 +67,7 @@ export const PaymentFailedEmail = ({
             <Text style={paragraph}>
               Best regards,
               <br />
-              The Your SaaS App Billing Team
+              The {appName} Billing Team
             </Text>
           </Section>
 

@@ -1,5 +1,5 @@
 // 🔒 CORE SYSTEM - DO NOT MODIFY
-// Next.js configuration for the SaaS boilerplate
+// Next.js configuration
 // Configures image domains and other build settings
 
 /** @type {import('next').NextConfig} */

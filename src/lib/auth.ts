@@ -1,5 +1,5 @@
 // 🔒 CORE SYSTEM - DO NOT MODIFY
-// NextAuth.js configuration for the SaaS boilerplate.
+// NextAuth.js configuration.
 // Handles OAuth authentication with Google and Email Magic Links.
 
 import { NextAuthOptions } from "next-auth";

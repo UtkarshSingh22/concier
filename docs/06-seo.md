@@ -1,6 +1,6 @@
 # SEO
 
-The boilerplate includes SEO utilities for metadata, sitemaps, and robots.txt.
+Scaffold includes SEO utilities for metadata, sitemaps, and robots.txt.
 
 ## Key Files
 
@@ -16,10 +16,10 @@ Edit defaults in `/lib/seo.ts`:
 
 ```typescript
 export const seoDefaults = {
-  siteName: "Your SaaS Name",
+  siteName: process.env.NEXT_PUBLIC_APP_NAME || "Your SaaS",
   title: {
-    default: "Your SaaS Name",
-    template: "%s | Your SaaS Name",
+    default: process.env.NEXT_PUBLIC_APP_NAME || "Your SaaS",
+    template: `%s | ${process.env.NEXT_PUBLIC_APP_NAME || "Your SaaS"}`,
   },
   description: "Your app description...",
   url: process.env.NEXT_PUBLIC_APP_URL,
@@ -27,7 +27,7 @@ export const seoDefaults = {
     url: "/og-image.jpg",
     width: 1200,
     height: 630,
-    alt: "Your SaaS Name",
+    alt: process.env.NEXT_PUBLIC_APP_NAME || "Your SaaS",
   },
   twitter: {
     handle: "@yourhandle",
@@ -112,7 +112,7 @@ export const metadata = createHomeMetadata({
         url: "/og-homepage.jpg",
         width: 1200,
         height: 630,
-        alt: "Your SaaS description",
+        alt: `${process.env.NEXT_PUBLIC_APP_NAME || "Your SaaS"} description`,
       },
     ],
   },

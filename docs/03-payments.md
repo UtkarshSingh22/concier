@@ -1,6 +1,6 @@
 # Payment Integration
 
-The boilerplate includes complete subscription management with support for multiple payment providers. Switch between Stripe and Razorpay by changing a single environment variable.
+Scaffold includes complete subscription management with support for multiple payment providers. Switch between Stripe and Razorpay by changing a single environment variable.
 
 ## Supported Providers
 

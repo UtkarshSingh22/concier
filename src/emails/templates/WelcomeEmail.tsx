@@ -12,24 +12,29 @@ import {
 interface WelcomeEmailProps {
   userName: string;
   loginUrl: string;
+  appName?: string;
 }
 
-export const WelcomeEmail = ({ userName, loginUrl }: WelcomeEmailProps) => {
+export const WelcomeEmail = ({
+  userName,
+  loginUrl,
+  appName = process.env.NEXT_PUBLIC_APP_NAME || "Your SaaS App",
+}: WelcomeEmailProps) => {
   return (
     <Html>
       <Head />
       <Body style={main}>
         <Container style={container}>
           <Section style={header}>
-            <Text style={heading}>Welcome to Your SaaS App! 🎉</Text>
+            <Text style={heading}>Welcome to {appName}! 🎉</Text>
           </Section>
 
           <Section style={content}>
             <Text style={greeting}>Hi {userName},</Text>
 
             <Text style={paragraph}>
-              Welcome aboard! Thank you for joining our platform. We&apos;re excited
-              to have you as part of our community.
+              Welcome aboard! Thank you for joining our platform. We&apos;re
+              excited to have you as part of our community.
             </Text>
 
             <Text style={paragraph}>
@@ -51,7 +56,7 @@ export const WelcomeEmail = ({ userName, loginUrl }: WelcomeEmailProps) => {
             <Text style={paragraph}>
               Best regards,
               <br />
-              The Your SaaS App Team
+              The {appName} Team
             </Text>
           </Section>
 
@@ -60,7 +65,7 @@ export const WelcomeEmail = ({ userName, loginUrl }: WelcomeEmailProps) => {
           <Section style={footer}>
             <Text style={footerText}>
               This email was sent to you because you recently created an account
-              with Your SaaS App. If you didn&apos;t create this account, please
+              with {appName}. If you didn&apos;t create this account, please
               ignore this email.
             </Text>
           </Section>

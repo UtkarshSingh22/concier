@@ -1,5 +1,5 @@
 // 🔒 CORE SYSTEM - DO NOT MODIFY
-// Authentication and authorization utilities for the SaaS boilerplate.
+// Authentication and authorization utilities.
 // These functions provide server-side protection for routes and API endpoints.
 
 import { getServerSession } from "next-auth";
