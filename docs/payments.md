@@ -1,114 +1,233 @@
-# Payment Integration
+# Payments
 
-Scaffold includes complete subscription management with support for multiple payment providers. Switch between Stripe and Razorpay by changing a single environment variable.
+Multi-provider payment system supporting Stripe and Razorpay with unified API and automatic entitlement sync.
 
-## Supported Providers
+## Architecture
 
-| Provider | Status       | Region Focus  | Currencies      |
-| -------- | ------------ | ------------- | --------------- |
-| Stripe   | ✅ Default   | Global        | 135+ currencies |
-| Razorpay | ✅ Supported | India-focused | INR, USD, etc.  |
+### Provider Abstraction
 
-## What's Implemented
+The system uses a common interface allowing seamless switching between payment providers:
 
-- Unified checkout flow (works with any provider)
-- Subscription management (create, cancel, reactivate)
-- Webhook handling (automatic entitlement sync)
-- Entitlement-based access control
-- Provider abstraction (switch without code changes)
+```typescript
+// Provider interface
+interface PaymentProvider {
+  createCheckoutSession(params: CheckoutParams): Promise<CheckoutSession>
+  cancelSubscription(subscriptionId: string): Promise<void>
+  getSubscription(subscriptionId: string): Promise<Subscription>
+}
 
-## Quick Setup
+// Usage
+import { payments } from "@/lib/payments"
 
-### 1. Choose Your Provider
-
-Set in `.env`:
-
-```bash
-# Use Stripe (default)
-PAYMENT_PROVIDER=stripe
-
-# Or use Razorpay
-PAYMENT_PROVIDER=razorpay
+const session = await payments.createCheckoutSession({
+  priceId: "price_xxx",
+  successUrl: "/success",
+  cancelUrl: "/cancel"
+})
 ```
 
-### 2. Configure Provider Keys
+### File Structure
 
-#### Stripe Configuration
+```
+src/lib/payments/
+├── index.ts           # Provider factory & exports
+├── types.ts           # Common interfaces
+├── stripe.ts          # Stripe implementation
+└── razorpay.ts        # Razorpay implementation
 
-```bash
-STRIPE_SECRET_KEY=sk_test_xxxxxxxxxxxxx
-STRIPE_PUBLISHABLE_KEY=pk_test_xxxxxxxxxxxxx
-STRIPE_WEBHOOK_SECRET=whsec_xxxxxxxxxxxxx
+src/lib/webhooks/
+├── stripe.ts          # Stripe webhook handlers
+└── razorpay.ts        # Razorpay webhook handlers
+
+src/app/api/payments/
+├── checkout/          # Unified checkout endpoint
+├── webhook/stripe/    # Stripe webhooks
+└── webhook/razorpay/  # Razorpay webhooks
 ```
 
-#### Razorpay Configuration
+## Provider Switching
 
-```bash
-RAZORPAY_KEY_ID=rzp_test_xxxxxxxxxxxxx
-RAZORPAY_KEY_SECRET=xxxxxxxxxxxxx
-RAZORPAY_WEBHOOK_SECRET=xxxxxxxxxxxxx
+Switch providers by changing the `PAYMENT_PROVIDER` environment variable:
+
+```typescript
+// In payments/index.ts
+const provider = process.env.PAYMENT_PROVIDER === 'razorpay'
+  ? razorpayProvider
+  : stripeProvider
+
+export const payments = provider
 ```
 
-See [13-environment-variables.md](13-environment-variables.md) for complete reference.
+## Checkout Flow
 
-### 3. Create Products/Plans
+### Unified Checkout
 
-**Stripe:**
+Single API endpoint handles both providers:
 
-1. Go to [Stripe Dashboard](https://dashboard.stripe.com/) → Products
-2. Create product (e.g., "Pro Plan")
-3. Add price ($29/month)
-4. Copy **Price ID** (starts with `price_`)
-
-**Razorpay:**
-
-1. Go to [Razorpay Dashboard](https://dashboard.razorpay.com/) → Subscriptions → Plans
-2. Create plan (e.g., "Pro Plan")
-3. Set billing cycle and amount
-4. Copy **Plan ID** (starts with `plan_`)
-
-### 4. Update Database
-
-Link your payment provider plan to database:
-
-**Stripe:**
-
-```bash
-node scripts/update-stripe-price.js pro price_xxxxxxxxxxxxx
+```typescript
+// POST /api/payments/checkout
+{
+  "priceId": "price_xxx",    // or "plan_xxx" for Razorpay
+  "successUrl": "/success",
+  "cancelUrl": "/cancel"
+}
 ```
 
-**Razorpay:**
+### Response Handling
 
-```bash
-node scripts/update-razorpay-plan.js pro plan_xxxxxxxxxxxxx
+```typescript
+// Client-side redirect
+if (session.url) {
+  window.location.href = session.url
+} else if (session.id) {
+  // Handle inline checkout (Stripe)
+  stripe.redirectToCheckout({ sessionId: session.id })
+}
 ```
 
-### 5. Configure Webhooks
+## Webhook Processing
 
-**Stripe:**
+### Event Mapping
 
-1. Stripe Dashboard → Developers → Webhooks
-2. Add endpoint: `https://yourdomain.com/api/payments/webhook/stripe`
-3. Select events:
-   - `checkout.session.completed`
-   - `invoice.paid`
-   - `invoice.payment_failed`
-   - `customer.subscription.updated`
-   - `customer.subscription.deleted`
-4. Copy webhook secret to `STRIPE_WEBHOOK_SECRET`
+Webhooks automatically sync subscription state and entitlements:
 
-**Razorpay:**
+| Stripe Event | Razorpay Event | Action |
+|-------------|---------------|--------|
+| `checkout.session.completed` | `subscription.activated` | Grant entitlements |
+| `invoice.paid` | `subscription.charged` | Update billing info |
+| `invoice.payment_failed` | `payment.failed` | Handle failed payment |
+| `customer.subscription.updated` | `subscription.paused/resumed` | Update subscription status |
+| `customer.subscription.deleted` | `subscription.cancelled` | Revoke entitlements |
 
-1. Razorpay Dashboard → Settings → Webhooks
-2. Add endpoint: `https://yourdomain.com/api/payments/webhook/razorpay`
-3. Select events:
-   - `subscription.activated`
-   - `subscription.charged`
-   - `subscription.cancelled`
-   - `subscription.paused`
-   - `subscription.resumed`
-   - `payment.failed`
-4. Copy webhook secret to `RAZORPAY_WEBHOOK_SECRET`
+### Entitlement Sync
+
+Webhooks trigger database updates:
+
+```typescript
+// Automatic entitlement management
+async function handleSubscriptionActivated(subscription: Subscription) {
+  await db.user.update({
+    where: { id: subscription.userId },
+    data: {
+      entitlements: subscription.plan.entitlements,
+      subscriptionStatus: 'active'
+    }
+  })
+}
+```
+
+## Subscription Management
+
+### Client-Side API
+
+```typescript
+// Cancel subscription
+const response = await fetch('/api/user/subscription', {
+  method: 'DELETE'
+})
+
+// Reactivate subscription
+const response = await fetch('/api/payments/checkout', {
+  method: 'POST',
+  body: JSON.stringify({
+    priceId: user.subscription.priceId,
+    isReactivation: true
+  })
+})
+```
+
+### Database Schema
+
+Subscriptions link to user entitlements:
+
+```prisma
+model User {
+  subscriptionId     String?
+  subscriptionStatus SubscriptionStatus?
+  entitlements       Json?  // ["pro_features", "api_access"]
+
+  // ... other fields
+}
+```
+
+## Error Handling
+
+### Webhook Verification
+
+All webhooks are cryptographically verified:
+
+```typescript
+// Stripe verification
+const event = stripe.webhooks.constructEvent(
+  body, signature, webhookSecret
+)
+
+// Razorpay verification
+const isValid = crypto.createHmac('sha256', secret)
+  .update(body)
+  .digest('hex') === signature
+```
+
+### Failed Payment Handling
+
+Automatic retry logic with email notifications:
+
+```typescript
+async function handlePaymentFailed(subscriptionId: string) {
+  // Send payment failed email
+  await sendEmail({
+    to: user.email,
+    template: PaymentFailedEmail,
+    data: { retryUrl: generateRetryUrl(subscriptionId) }
+  })
+
+  // Update subscription status
+  await updateSubscriptionStatus(subscriptionId, 'past_due')
+}
+```
+
+## Modifying Payment Behavior
+
+### Adding Custom Plans
+
+1. Create plan in payment provider dashboard
+2. Add to database schema if needed
+3. Update scripts to link plan IDs
+
+### Custom Checkout Flow
+
+Extend the checkout endpoint:
+
+```typescript
+// In /api/payments/checkout/route.ts
+export async function POST(request: Request) {
+  const { priceId, customData } = await request.json()
+
+  // Add custom logic here
+  const session = await payments.createCheckoutSession({
+    priceId,
+    metadata: customData  // Pass to webhook
+  })
+
+  return Response.json(session)
+}
+```
+
+### Custom Webhook Events
+
+Add handlers for new webhook events:
+
+```typescript
+// In webhooks/stripe.ts
+export async function handleWebhook(event: Stripe.Event) {
+  switch (event.type) {
+    case 'custom.event':
+      await handleCustomEvent(event.data.object)
+      break
+    // ... existing cases
+  }
+}
+```
 
 ## Architecture
 
@@ -204,7 +323,7 @@ enum PaymentProvider {
                                                        ▼
 ┌──────────────┐     ┌─────────────────┐     ┌──────────────────┐
 │   Database   │◀────│ Webhook Handler │◀────│  Provider Event  │
-│ (Subscription)│     │  (per provider) │     │                  │
+│(Subscription)│     │  (per provider) │     │                  │
 └──────────────┘     └─────────────────┘     └──────────────────┘
 ```
 
@@ -653,7 +772,6 @@ To add a new payment provider:
 
 ## Related Documentation
 
-- [04-entitlements.md](04-entitlements.md) - Feature gating system
-- [08-paywalls.md](08-paywalls.md) - Paywall implementation
-- [11-deployment.md](11-deployment.md) - Production deployment
-- [13-environment-variables.md](13-environment-variables.md) - Environment variables
+- [entitlements.md](entitlements.md) - Feature gating system
+- [deployment.md](deployment.md) - Production deployment
+- [environment-variables.md](environment-variables.md) - Environment variables

@@ -52,13 +52,15 @@ Used in: `/lib/payments/stripe.ts`, `/api/payments/`
 
 ### Razorpay (Alternative to Stripe)
 
-| Variable                  | Description             | Example                 |
-| ------------------------- | ----------------------- | ----------------------- |
-| `RAZORPAY_KEY_ID`         | Razorpay API key ID     | `rzp_test_xxxxxxxxxxxx` |
-| `RAZORPAY_KEY_SECRET`     | Razorpay API key secret | `xxxxxxxxxxxxxxxx`      |
-| `RAZORPAY_WEBHOOK_SECRET` | Webhook endpoint secret | `xxxxxxxxxxxxxxxx`      |
+| Variable                  | Description                                 | Example                 |
+| ------------------------- | ------------------------------------------- | ----------------------- |
+| `RAZORPAY_KEY_ID`         | Razorpay API key ID                         | `rzp_test_xxxxxxxxxxxx` |
+| `RAZORPAY_KEY_SECRET`     | Razorpay API key secret                     | `xxxxxxxxxxxxxxxx`      |
+| `RAZORPAY_WEBHOOK_SECRET` | Webhook endpoint secret (generate your own) | `xxxxxxxxxxxxxxxx`      |
 
 Used in: `/lib/payments/razorpay.ts`, `/api/payments/`
+
+**Note:** Unlike Stripe, Razorpay requires you to generate your own webhook secret. See [payments.md](payments.md) for generation instructions.
 
 ### Email
 
@@ -80,12 +82,13 @@ Used in: `/lib/seo.ts`, `/app/sitemap.ts`, `/app/robots.ts`
 
 These have defaults or fallbacks:
 
-| Variable        | Description            | Default                      |
-| --------------- | ---------------------- | ---------------------------- |
-| `EMAIL_FROM`    | Sender email address   | Falls back to Resend default |
-| `SUPPORT_EMAIL` | Contact form recipient | Falls back to `EMAIL_FROM`   |
+| Variable               | Description            | Default                      |
+| ---------------------- | ---------------------- | ---------------------------- |
+| `EMAIL_FROM`           | Sender email address   | Falls back to Resend default |
+| `SUPPORT_EMAIL`        | Contact form recipient | Falls back to `EMAIL_FROM`   |
+| `NEXT_PUBLIC_APP_NAME` | App name for branding  | "Your SaaS"                  |
 
-Used in: `/lib/email.ts`, `/api/contact/route.ts`, `/api/auth/magic-link/`
+Used in: `/lib/email.ts`, `/api/contact/route.ts`, `/api/auth/magic-link/`, `/components/`
 
 ### Error Tracking (Optional)
 
@@ -99,7 +102,7 @@ Used in: `/lib/email.ts`, `/api/contact/route.ts`, `/api/auth/magic-link/`
 
 Used in: `sentry.*.config.ts`, error boundaries, API routes
 
-See [14-error-tracking.md](14-error-tracking.md) for setup instructions.
+See [error-tracking.md](error-tracking.md) for setup instructions.
 
 ### AI Providers (Optional)
 
@@ -113,13 +116,19 @@ See [14-error-tracking.md](14-error-tracking.md) for setup instructions.
 
 Used in: `/lib/ai/providers/`
 
-See [16-ai-setup.md](16-ai-setup.md) for setup instructions.
+See [ai-setup.md](ai-setup.md) for setup instructions.
 
 ## Environment File Template
 
 Create `.env` file with these values:
 
 ```bash
+# ===================
+# APP DETAILS
+# ===================
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_APP_NAME="Your SaaS"
+
 # ===================
 # DATABASE
 # ===================
@@ -156,21 +165,7 @@ STRIPE_WEBHOOK_SECRET=whsec_your-webhook-secret
 # ===================
 RESEND_API_KEY=re_your-resend-api-key
 EMAIL_FROM=noreply@yourdomain.com
-
-# ===================
-# APP URL
-# ===================
-NEXT_PUBLIC_APP_URL=http://localhost:3000
-
-# ===================
-# ERROR TRACKING (Optional - Sentry)
-# ===================
-# Server-side error tracking
-SENTRY_DSN=https://1234567890abcdef1234567890abcdef@o123456.ingest.sentry.io/1234567
-SENTRY_ENVIRONMENT=development
-
-# Client-side error tracking
-NEXT_PUBLIC_SENTRY_DSN=https://1234567890abcdef1234567890abcdef@o123456.ingest.sentry.io/1234567
+SUPPORT_EMAIL=noreply@yourdomain.com
 
 # ===================
 # AI PROVIDERS (Optional)
@@ -183,6 +178,17 @@ ANTHROPIC_API_KEY=sk-ant-your-anthropic-api-key
 
 # Google Gemini
 GEMINI_API_KEY=AIzaSy-your-gemini-api-key
+
+# ===================
+# ERROR TRACKING (Optional - Sentry)
+# ===================
+SENTRY_ENVIRONMENT=development
+
+# Server-side error tracking
+SENTRY_DSN=https://1234567890abcdef1234567890abcdef@o123456.ingest.sentry.io/1234567
+
+# Client-side error tracking
+NEXT_PUBLIC_SENTRY_DSN=https://1234567890abcdef1234567890abcdef@o123456.ingest.sentry.io/1234567
 ```
 
 ## Getting API Keys

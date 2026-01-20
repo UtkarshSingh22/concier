@@ -224,17 +224,19 @@ const dailyTokens = await getUserDailyTokens(userId);
 ### Database Schema
 
 ```prisma
-model AIUsage {
+model AiUsage {
   id               String   @id @default(cuid())
   userId           String
-  provider         String
-  model            String
+  provider         String   // "openai", "anthropic", "gemini"
+  model            String   // "gpt-4o-mini", "claude-3-5-sonnet", etc.
   promptTokens     Int
   completionTokens Int
   totalTokens      Int
-  createdAt        DateTime @default(now())
+
+  createdAt DateTime @default(now())
 
   @@index([userId, createdAt])
+  @@map("ai_usage")
 }
 ```
 
@@ -386,7 +388,7 @@ Copy this route as a starting point for your AI features.
 2. **Monitor usage**: Query `AIUsage` table regularly
 3. **Entitlement gating**: Only Pro users get AI access
 4. **Rate limiting**: Prevent abuse with per-user limits
-5. **Track by provider**: Usage stats broken down by provider
+5. **Track by provider**: Usage stats broken down by provider (openai, anthropic, gemini)
 
 ### Provider Cost Comparison
 

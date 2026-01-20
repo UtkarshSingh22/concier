@@ -1,249 +1,123 @@
-# Scaffold
+# Getting Started
 
-A production-ready Next.js 14 SaaS boilerplate with authentication, billing, and multi-provider payments.
+This codebase provides production-ready infrastructure for web applications. It handles authentication, payments, and feature gating so you can focus on building your product.
 
-## Quick Start (10 minutes)
+## Mental Model
 
-### 1. Environment Setup
+Think of this codebase as having three layers:
+
+### 1. Core Infrastructure (Keep as-is)
+
+Authentication, payments, database schema, and system integrations. These are battle-tested and work together seamlessly.
+
+### 2. Example/Marketing Code (Remove or replace)
+
+Landing pages, pricing pages, and demo components. These show how to use the infrastructure but aren't your actual product.
+
+### 3. Your Application Code (Build here)
+
+Your dashboard, API routes, and custom components. This is where you add business logic.
+
+## What You'll Customize
+
+### Files to Edit
+
+- `/app/(protected)/product/` - Your main application pages
+- `/components/product/` - Your UI components
+- `/app/api/` - Your API routes (add new ones, don't modify existing)
+- `/prisma/schema.prisma` - Database schema extensions
+
+### Files to Keep
+
+- `/lib/` - Core utilities and integrations
+- `/components/ui/` - Design system components
+- `/components/FeatureGate.tsx` - Paywall component
+- All authentication and payment routes
+
+### Files to Remove
+
+- Marketing content you don't need
+- Example components once you understand the patterns
+- Unused email templates
+
+## Development Workflow
+
+1. **Setup environment** (see below)
+2. **Explore the example** - Login, view dashboard, test payments
+3. **Replace marketing pages** with your branding
+4. **Build in `/app/(protected)/product/`** - Your main application
+5. **Add API routes** in `/app/api/` as needed
+6. **Gate features** with `FeatureGate` components
+
+## Quick Setup
 
 ```bash
+# 1. Copy environment template
 cp .env.example .env
-```
 
-Edit `.env` and add your API keys:
+# 2. Add required API keys (see docs/environment-variables.md)
+# - Database URL (Supabase, Neon, etc.)
+# - Auth secrets (Google OAuth, email provider)
+# - Payment provider keys (Stripe or Razorpay)
 
-- `DATABASE_URL` - Your PostgreSQL connection string
-- `AUTH_SECRET` - Generate a random 32+ character string
-- `NEXTAUTH_URL` - Your app URL (http://localhost:3000 for dev)
-- `GOOGLE_CLIENT_ID` & `GOOGLE_CLIENT_SECRET` - From Google Cloud Console
-- `RESEND_API_KEY` - From Resend Dashboard
-- `EMAIL_FROM` - Your sender email (e.g., noreply@yourdomain.com)
-- `NEXT_PUBLIC_APP_URL` - Your public app URL (same as NEXTAUTH_URL)
-- **Payment Provider** (choose one):
-  - Stripe: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PUBLISHABLE_KEY`
-  - Razorpay: `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, `RAZORPAY_WEBHOOK_SECRET`
-- `PAYMENT_PROVIDER` - Set to `stripe` or `razorpay` (defaults to stripe)
-
-See [docs/13-environment-variables.md](docs/13-environment-variables.md) for detailed instructions.
-
-### 2. Install & Setup Database
-
-**Supported Database Services (PostgreSQL):**
-
-- [Supabase](https://supabase.com) - Recommended, free tier available
-- [Neon](https://neon.tech) - Serverless, free tier available
-- [Railway](https://railway.app) - Simple setup, pay-as-you-go
-- [Vercel Postgres](https://vercel.com/storage/postgres) - Native Vercel integration
-
-```bash
+# 3. Install dependencies
 pnpm install
+
+# 4. Setup database
 pnpm db:setup
-```
 
-### 3. Configure Payment Provider
-
-**Option A: Stripe (Default)**
-
-1. Create a product in [Stripe Dashboard](https://dashboard.stripe.com/) → Products
-2. Add a monthly price (e.g., $29/month)
-3. Copy the Price ID and run:
-   ```bash
-   node scripts/update-stripe-price.js pro price_xxxxxxxxxxxxx
-   ```
-
-**Option B: Razorpay**
-
-1. Create a plan in [Razorpay Dashboard](https://dashboard.razorpay.com/) → Subscriptions → Plans
-2. Set billing cycle and amount
-3. Copy the Plan ID and run:
-   ```bash
-   node scripts/update-razorpay-plan.js pro plan_xxxxxxxxxxxxx
-   ```
-4. Set `PAYMENT_PROVIDER=razorpay` in `.env`
-
-See [docs/03-payments.md](docs/03-payments.md) for complete payment provider setup.
-
-### 4. Start Development
-
-```bash
+# 5. Start development
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000)
+Visit `http://localhost:3000` and explore the working example.
 
-### 5. Test the App
+## Common Patterns
 
-1. Click "Get Started" or "Sign In"
-2. Sign in with Google or magic link
-3. Explore the dashboard at `/product`
-4. Check the billing page at `/billing`
+### Adding a Protected Page
 
-## What's Included
+```typescript
+// /app/(protected)/my-feature/page.tsx
+import { requireAuth } from "@/lib/auth-utils";
 
-| Feature              | Status   | Docs                                            |
-| -------------------- | -------- | ----------------------------------------------- |
-| Google OAuth         | ✅ Ready | [01-auth.md](docs/01-auth.md)                   |
-| Magic Links          | ✅ Ready | [01-auth.md](docs/01-auth.md)                   |
-| Subscriptions        | ✅ Ready | [03-payments.md](docs/03-payments.md)           |
-| Stripe & Razorpay    | ✅ Ready | [03-payments.md](docs/03-payments.md)           |
-| Plans & Entitlements | ✅ Ready | [04-entitlements.md](docs/04-entitlements.md)   |
-| Email System         | ✅ Ready | [05-email.md](docs/05-email.md)                 |
-| Landing Pages        | ✅ Ready | [07-landing-pages.md](docs/07-landing-pages.md) |
-| Paywalls             | ✅ Ready | [08-paywalls.md](docs/08-paywalls.md)           |
-| Protected Routes     | ✅ Ready | [09-app-pages.md](docs/09-app-pages.md)         |
-| SEO                  | ✅ Ready | [06-seo.md](docs/06-seo.md)                     |
-| Database             | ✅ Ready | [02-database.md](docs/02-database.md)           |
-| Dark Mode            | ✅ Ready | [15-theme.md](docs/15-theme.md)                 |
-| AI Infrastructure    | ✅ Ready | [16-ai-setup.md](docs/16-ai-setup.md)           |
-
-## Project Structure
-
-```
-src/
-├── app/
-│   ├── (protected)/     # Auth-required pages (dashboard, billing)
-│   ├── api/             # API routes
-│   ├── auth/            # Login pages
-│   └── ...              # Landing pages (home, pricing, contact, etc.)
-├── components/
-│   ├── landing/         # Landing page sections
-│   ├── product/         # Your product components (editable)
-│   └── ui/              # shadcn/ui components
-├── emails/              # Email templates
-├── hooks/               # React hooks
-├── lib/                 # Core utilities
-└── docs/                # Documentation
+export default async function MyFeaturePage() {
+  const user = await requireAuth();
+  return <div>My feature for {user.email}</div>;
+}
 ```
 
-## File Markers
-
-Files are marked at the top:
-
-- **🔒 CORE SYSTEM - DO NOT MODIFY**: Critical boilerplate. Don't edit.
-- **🏗️ USER EDITABLE**: Safe to customize. Build your product here.
-
-## Build Your Product
-
-Your code goes here:
-
-| Location                    | Purpose            |
-| --------------------------- | ------------------ |
-| `/app/(protected)/product/` | Your dashboard     |
-| `/components/product/`      | Your UI components |
-| `/app/api/`                 | Your API routes    |
-
-### Example: Adding a Feature
-
-1. Create a component:
-
-   ```typescript
-   // /components/product/MyFeature.tsx
-   export function MyFeature() {
-     return <div>My Feature</div>;
-   }
-   ```
-
-2. Add to dashboard:
-
-   ```typescript
-   // /app/(protected)/product/page.tsx
-   import { MyFeature } from "@/components/product/MyFeature";
-   ```
-
-3. Gate behind paywall (optional):
-   ```typescript
-   <FeatureGate entitlement="pro_features">
-     <MyFeature />
-   </FeatureGate>
-   ```
-
-## Paywall Example
+### Gating a Feature
 
 ```typescript
 import { FeatureGate } from "@/components/FeatureGate";
 
-export default function Dashboard() {
-  return (
-    <div>
-      <FreeContent />
-
-      <FeatureGate entitlement="pro_features">
-        <PremiumContent />  {/* Only shown to Pro users */}
-      </FeatureGate>
-    </div>
-  );
-}
+<FeatureGate entitlement="pro_features">
+  <PremiumFeature />
+</FeatureGate>
 ```
 
-## Available Entitlements
+### Adding an API Route
 
-| Entitlement        | Plan | Usage             |
-| ------------------ | ---- | ----------------- |
-| `basic_access`     | Free | Basic dashboard   |
-| `pro_features`     | Pro  | Advanced features |
-| `api_access`       | Pro  | API access        |
-| `priority_support` | Pro  | Priority support  |
+```typescript
+// /app/api/my-endpoint/route.ts
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
-## Commands
+export async function GET() {
+  const session = await getServerSession(authOptions);
+  if (!session) return new Response("Unauthorized", { status: 401 });
 
-```bash
-pnpm dev              # Start development server
-pnpm build            # Build for production
-pnpm db:setup         # Setup database (generate + push + seed)
-pnpm db:studio        # Open Prisma Studio
-
-# Update payment provider plan IDs
-node scripts/update-stripe-price.js pro price_xxx      # Stripe
-node scripts/update-razorpay-plan.js pro plan_xxx      # Razorpay
+  // Your logic here
+  return Response.json({ data: "..." });
+}
 ```
 
 ## Documentation
 
-Full documentation is in the `/docs` folder:
-
-- [00-overview.md](docs/00-overview.md) - Project overview
-- [01-auth.md](docs/01-auth.md) - Authentication system
-- [02-database.md](docs/02-database.md) - Database schema
-- [03-payments.md](docs/03-payments.md) - Payment integration quick start
-- [04-entitlements.md](docs/04-entitlements.md) - Feature gating
-- [05-email.md](docs/05-email.md) - Email system
-- [06-seo.md](docs/06-seo.md) - SEO configuration
-- [07-landing-pages.md](docs/07-landing-pages.md) - Marketing pages
-- [08-paywalls.md](docs/08-paywalls.md) - Paywall implementation
-- [09-app-pages.md](docs/09-app-pages.md) - Protected routes
-- [10-product-features.md](docs/10-product-features.md) - Building features
-- [11-deployment.md](docs/11-deployment.md) - Production deployment
-- [12-seeding.md](docs/12-seeding.md) - Database seeding
-- [13-environment-variables.md](docs/13-environment-variables.md) - All env vars
-- [14-error-tracking.md](docs/14-error-tracking.md) - Error tracking (optional)
-- [15-theme.md](docs/15-theme.md) - Dark mode & theming
-- [16-ai-setup.md](docs/16-ai-setup.md) - AI infrastructure (optional)
-
-## Deployment
-
-1. Push to GitHub
-2. Connect to Vercel
-3. Add environment variables
-4. Deploy
-
-See [11-deployment.md](docs/11-deployment.md) for detailed instructions.
-
-## Tech Stack
-
-- **Framework**: Next.js 14 (App Router)
-- **Language**: TypeScript
-- **Database**: PostgreSQL + Prisma
-- **Auth**: NextAuth.js v4
-- **Payments**: Stripe & Razorpay (switchable)
-- **Email**: Resend
-- **Styling**: Tailwind CSS + shadcn/ui
-- **AI**: OpenAI, Anthropic, Gemini (optional)
-- **Error Tracking**: Sentry (optional)
-
-## Support
-
-- Check the `/docs` folder for detailed documentation
-- Review example implementations in the codebase
-- Look for 🏗️ USER EDITABLE markers for safe customization points
-
-**Built for serious SaaS founders who want to ship, not tinker.**
+- [Authentication & sessions](docs/auth.md)
+- [Database & data access](docs/database.md)
+- [Payments & billing](docs/payments.md)
+- [Feature gating](docs/entitlements.md)
+- [UI components](docs/ui-components.md)
+- [Email system](docs/email.md)
+- [Deployment](docs/deployment.md)

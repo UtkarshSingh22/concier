@@ -226,7 +226,7 @@ node scripts/update-stripe-price.js pro price_live_xxxxxxxxxxxxx
 node scripts/update-razorpay-plan.js pro plan_live_xxxxxxxxxxxxx
 ```
 
-See [11-deployment.md](11-deployment.md) for complete production setup guide.
+See [deployment.md](deployment.md) for complete production setup guide.
 
 ## Verifying Seed Data
 

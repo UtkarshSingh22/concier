@@ -85,10 +85,12 @@ git push -u origin main
    - Copy webhook secret to `STRIPE_WEBHOOK_SECRET`
 
    **For Razorpay:**
+   - Generate a secure webhook secret (see [payments.md](payments.md) for generation options)
    - Razorpay Dashboard → Settings → Webhooks
    - Add endpoint: `https://yourdomain.com/api/payments/webhook/razorpay`
+   - Use your generated secret as the webhook secret in Razorpay
    - Select events: `subscription.activated`, `subscription.charged`, `subscription.cancelled`, `payment.failed`
-   - Copy webhook secret to `RAZORPAY_WEBHOOK_SECRET`
+   - Add the same secret to `RAZORPAY_WEBHOOK_SECRET` in your environment variables
 
 3. **Connect to Production Database Locally**:
 
