@@ -1,5 +1,7 @@
 # Getting Started
 
+> **⚠️ Node.js Requirement**: This project requires Node.js version 20 or above.
+
 This codebase provides production-ready infrastructure for web applications. It handles authentication, payments, and feature gating so you can focus on building your product.
 
 ## Mental Model
