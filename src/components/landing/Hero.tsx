@@ -69,7 +69,7 @@ export function Hero() {
             </div>
 
             {/* Main headline */}
-            <h1 className="text-6xl font-bold tracking-tight text-foreground sm:text-8xl lg:text-9xl xl:text-[10rem] leading-none">
+            <h1 className="text-6xl font-bold tracking-tight text-foreground sm:text-8xl lg:text-9xl xl:text-[10rem] leading-tight">
               <span className="block bg-gradient-to-r from-emerald-600 via-teal-600 to-green-600 dark:from-emerald-400 dark:via-teal-400 dark:to-green-400 bg-clip-text text-transparent">
                 {process.env.NEXT_PUBLIC_APP_NAME || "Your SaaS"}
               </span>
