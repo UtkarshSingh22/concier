@@ -1,6 +1,6 @@
-// 🔒 CORE SYSTEM - DO NOT MODIFY
-// Billing and subscription management dashboard
-// Shows current plan, billing info, and upgrade options
+// 🏗️ USER EDITABLE - BILLING PAGE
+// Customize the styling and layout of the billing dashboard.
+// The core subscription management functionality should remain intact.
 
 "use client";
 
@@ -43,7 +43,7 @@ interface EntitlementData {
 const BillingPage = () => {
   const searchParams = useSearchParams();
   const [subscription, setSubscription] = useState<SubscriptionData | null>(
-    null
+    null,
   );
   const [entitlements, setEntitlements] = useState<EntitlementData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -234,7 +234,7 @@ const BillingPage = () => {
                           <span>Next billing:</span>
                           <span>
                             {new Date(
-                              subscription.currentPeriodEnd
+                              subscription.currentPeriodEnd,
                             ).toLocaleDateString()}
                           </span>
                         </div>

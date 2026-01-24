@@ -1,6 +1,6 @@
-// 🔒 CORE SYSTEM - DO NOT MODIFY
-// Status messages component for billing page
-// Shows success/error alerts and toast notifications based on URL parameters
+// 🏗️ USER EDITABLE - STATUS MESSAGES COMPONENT
+// Customize the styling and appearance of status messages and alerts.
+// The core functionality (reading URL parameters and displaying messages) should remain intact.
 
 "use client";
 

@@ -1,5 +1,6 @@
-// 🔒 CORE SYSTEM - DO NOT MODIFY
+// 🔒 CORE SYSTEM
 // This seed script sets up default plans, entitlements, and admin user.
+// You can modify this script to customize the initial data for your application.
 // Run with: pnpm prisma db seed
 
 import { PrismaClient } from "@prisma/client";

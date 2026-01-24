@@ -1,6 +1,6 @@
-// 🔒 CORE SYSTEM - DO NOT MODIFY
-// Root layout component with SessionProvider and Toaster
-// Users should NOT edit this file. Build your product logic in /product instead.
+// 🏗️ USER EDITABLE - ROOT LAYOUT
+// Customize the styling and structure of the root layout.
+// Keep the SessionProvider and Toaster components for core functionality.
 
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";

@@ -1,6 +1,7 @@
-// 🔒 CORE SYSTEM - DO NOT MODIFY
+// 🔒 CORE SYSTEM
 // This is the database schema.
-// Users should NOT edit this file. The schema ensures subscription and entitlement logic.
+// You can modify this schema to add your own models and fields as needed.
+// The existing models (User, Subscription, Plan, Entitlement) handle subscription and entitlement logic.
 
 generator client {
   provider = "prisma-client-js"

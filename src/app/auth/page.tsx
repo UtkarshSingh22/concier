@@ -1,6 +1,6 @@
-// 🔒 CORE SYSTEM - DO NOT MODIFY
-// Authentication page with OAuth providers.
-// Users should NOT edit this file. Build your product logic in /product instead.
+// 🏗️ USER EDITABLE - AUTHENTICATION PAGE
+// Customize the styling and layout of the authentication page.
+// The core authentication functionality should remain intact.
 
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";

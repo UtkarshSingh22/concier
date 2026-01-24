@@ -1,6 +1,6 @@
-// 🔒 CORE SYSTEM - DO NOT MODIFY
-// Client component for handling subscription upgrades
-// Creates checkout sessions via unified payment abstraction (Stripe or Razorpay)
+// 🏗️ USER EDITABLE - UPGRADE BUTTON COMPONENT
+// Customize the styling and appearance of the upgrade button.
+// The core payment checkout flow logic should remain intact.
 
 "use client";
 
@@ -51,7 +51,7 @@ export const UpgradeButton = ({
       toast.error(
         error instanceof Error
           ? error.message
-          : "Failed to start upgrade process"
+          : "Failed to start upgrade process",
       );
     } finally {
       setIsLoading(false);

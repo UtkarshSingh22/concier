@@ -1,6 +1,6 @@
-// 🔒 CORE SYSTEM - DO NOT MODIFY
-// Root-level error boundary
-// Catches errors that escape the regular error boundary
+// 🏗️ USER EDITABLE - GLOBAL ERROR BOUNDARY
+// Customize the styling and messaging of the global error page.
+// The core error boundary logic should remain intact.
 
 "use client";
 

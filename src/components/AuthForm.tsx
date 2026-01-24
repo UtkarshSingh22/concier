@@ -1,6 +1,6 @@
-// 🔒 CORE SYSTEM - DO NOT MODIFY
-// Authentication form component with OAuth providers.
-// Users should NOT edit this file. Build your product logic in /product instead.
+// 🏗️ USER EDITABLE - AUTHENTICATION FORM COMPONENT
+// Customize the styling and layout of the authentication form.
+// The core authentication logic (OAuth, magic links) should remain intact.
 
 "use client";
 
@@ -68,7 +68,7 @@ const AuthForm = () => {
 
       if (response.ok) {
         toast.success(
-          "Magic link sent! Check your email and click the link to sign in."
+          "Magic link sent! Check your email and click the link to sign in.",
         );
         setEmail(""); // Clear the email field
       } else {

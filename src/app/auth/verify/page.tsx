@@ -1,6 +1,6 @@
-// 🔒 CORE SYSTEM - DO NOT MODIFY
-// Email verification success page
-// Handles NextAuth sign-in after magic link verification
+// 🏗️ USER EDITABLE - EMAIL VERIFICATION PAGE
+// Customize the styling and messaging of the email verification page.
+// The core verification logic should remain intact.
 
 "use client";
 

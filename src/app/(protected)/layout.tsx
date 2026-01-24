@@ -1,7 +1,6 @@
-// 🔒 CORE SYSTEM - DO NOT MODIFY
-// Protected layout for authenticated routes.
-// Provides server-side authentication checks and optional entitlement banners.
-// This layout wraps all protected pages and ensures users are authenticated.
+// 🏗️ USER EDITABLE - PROTECTED LAYOUT
+// Customize the styling and structure of the protected layout.
+// The core authentication checks and entitlement logic should remain intact.
 
 import { requireAuth } from "@/lib/auth-utils";
 

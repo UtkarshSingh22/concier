@@ -1,6 +1,6 @@
-// 🔒 CORE SYSTEM - DO NOT MODIFY
-// Theme toggle button for switching between light/dark modes
-// Uses lucide-react icons and next-themes
+// 🏗️ USER EDITABLE - THEME TOGGLE COMPONENT
+// Customize the styling and appearance of the theme toggle button.
+// The core functionality (theme switching) should remain intact.
 
 "use client";
 
