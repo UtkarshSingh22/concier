@@ -19,6 +19,13 @@ These must be set for the app to function:
 | -------------- | ---------------------------- | ------------------------------------- |
 | `DATABASE_URL` | PostgreSQL connection string | `postgresql://user:pass@host:5432/db` |
 
+**How to get DATABASE_URL:**
+
+| Provider | Instructions                                                                 |
+| -------- | ---------------------------------------------------------------------------- |
+| Supabase | Go to **Supabase Project -> Connect → ORMs → Prisma** and copy the **DIRECT_URL**                |
+| Neon     | Go to your Neon project → **Dashboard → Connect to your database**, and copy the **Connection string** |
+
 Used in: `/prisma/schema.prisma`
 
 ### Authentication
