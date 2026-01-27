@@ -223,25 +223,11 @@ Or use: [generate-secret.vercel.app](https://generate-secret.vercel.app/32)
 
 ### Stripe Keys
 
-1. Go to [Stripe Dashboard](https://dashboard.stripe.com/)
-2. Developers → API Keys
-3. Copy Publishable key and Secret key
-4. For webhooks:
-   - Developers → Webhooks
-   - Add endpoint: `https://yourdomain.com/api/payments/webhook/stripe`
-   - Select events: `checkout.session.completed`, `invoice.paid`, `invoice.payment_failed`, `customer.subscription.updated`, `customer.subscription.deleted`
-   - Copy Signing secret
+Check payemnt-setup.md for the instructions
 
 ### Razorpay Keys (Alternative)
 
-1. Go to [Razorpay Dashboard](https://dashboard.razorpay.com/)
-2. Settings → API Keys
-3. Generate and copy Key ID and Key Secret
-4. For webhooks:
-   - Settings → Webhooks
-   - Add endpoint: `https://yourdomain.com/api/payments/webhook/razorpay`
-   - Select events: `subscription.activated`, `subscription.charged`, `subscription.cancelled`, `payment.failed`
-   - Copy Webhook Secret
+Check payemnt-setup.md for the instructions
 
 ### Resend API Key
 
