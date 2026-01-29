@@ -1,6 +1,7 @@
 /**
- * Patch for Next.js typegen: generated code imports from "next/types.js"
- * but that module is a runtime stub. Re-export types from "next" so TypeScript resolves correctly.
+ * Patch for Next.js type resolution at build time.
+ * - "next/types.js" is a runtime stub; re-export types so typegen resolves.
+ * - "next" sometimes doesn't expose Metadata etc.; re-export from internal types.
  */
 declare module "next/types.js" {
   export type {
@@ -11,5 +12,17 @@ declare module "next/types.js" {
     ResolvedViewport,
     ResolvingViewport,
     MetadataRoute,
-  } from "next";
+  } from "next/dist/lib/metadata/types/metadata-interface";
+}
+
+declare module "next" {
+  export type {
+    Metadata,
+    ResolvedMetadata,
+    ResolvingMetadata,
+    Viewport,
+    ResolvedViewport,
+    ResolvingViewport,
+    MetadataRoute,
+  } from "next/dist/lib/metadata/types/metadata-interface";
 }
