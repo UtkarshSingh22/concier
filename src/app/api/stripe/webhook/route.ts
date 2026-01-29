@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 import Stripe from "stripe";
 import * as Sentry from "@sentry/nextjs";
-import { stripe, STRIPE_CONFIG } from "@/lib/stripe";
+import { getStripe, getSTRIPE_CONFIG } from "@/lib/stripe";
 import {
   handleCheckoutSessionCompleted,
   handleInvoicePaid,
@@ -28,10 +28,11 @@ export async function POST(request: NextRequest) {
     // Verify webhook signature
     let event: Stripe.Event;
     try {
-      event = stripe.webhooks.constructEvent(
+      const config = getSTRIPE_CONFIG();
+      event = getStripe().webhooks.constructEvent(
         body,
         signature,
-        STRIPE_CONFIG.webhookSecret
+        config.webhookSecret
       );
     } catch (err) {
       console.error("Webhook signature verification failed:", err);

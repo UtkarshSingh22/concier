@@ -5,27 +5,49 @@
 import Stripe from "stripe";
 import { db } from "./db";
 
-// Validate Stripe environment variables
-if (!process.env.STRIPE_SECRET_KEY) {
-  throw new Error("STRIPE_SECRET_KEY environment variable is required");
-}
-if (!process.env.STRIPE_WEBHOOK_SECRET) {
-  throw new Error("STRIPE_WEBHOOK_SECRET environment variable is required");
-}
-if (!process.env.STRIPE_PUBLISHABLE_KEY) {
-  throw new Error("STRIPE_PUBLISHABLE_KEY environment variable is required");
+// Lazy initialization: only validate and create client when Stripe is actually used.
+// This allows the app to build and run when PAYMENT_PROVIDER is "razorpay" (no Stripe keys required).
+let stripeClient: Stripe | null = null;
+
+function getStripeConfig(): {
+  secretKey: string;
+  webhookSecret: string;
+  publishableKey: string;
+} {
+  const secretKey = process.env.STRIPE_SECRET_KEY;
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  const publishableKey = process.env.STRIPE_PUBLISHABLE_KEY;
+
+  if (!secretKey) {
+    throw new Error("STRIPE_SECRET_KEY environment variable is required");
+  }
+  if (!webhookSecret) {
+    throw new Error("STRIPE_WEBHOOK_SECRET environment variable is required");
+  }
+  if (!publishableKey) {
+    throw new Error("STRIPE_PUBLISHABLE_KEY environment variable is required");
+  }
+
+  return { secretKey, webhookSecret, publishableKey };
 }
 
-// Initialize Stripe client
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2024-06-20",
-});
+export function getStripe(): Stripe {
+  if (!stripeClient) {
+    const { secretKey } = getStripeConfig();
+    stripeClient = new Stripe(secretKey, {
+      apiVersion: "2024-06-20",
+    });
+  }
+  return stripeClient;
+}
 
-// Stripe configuration
-export const STRIPE_CONFIG = {
-  publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
-  webhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
-} as const;
+export function getSTRIPE_CONFIG(): {
+  publishableKey: string;
+  webhookSecret: string;
+} {
+  const { publishableKey, webhookSecret } = getStripeConfig();
+  return { publishableKey, webhookSecret };
+}
 
 // Helper to get Stripe price ID for a plan
 export async function getStripePriceId(
@@ -84,7 +106,7 @@ export async function createCheckoutSession({
   successUrl: string;
   cancelUrl: string;
 }) {
-  return await stripe.checkout.sessions.create({
+  return await getStripe().checkout.sessions.create({
     mode: "subscription",
     payment_method_types: ["card"],
     line_items: [
@@ -226,14 +248,14 @@ export async function hasEntitlement(
 
 // Cancel subscription
 export async function cancelSubscription(subscriptionId: string) {
-  return await stripe.subscriptions.update(subscriptionId, {
+  return await getStripe().subscriptions.update(subscriptionId, {
     cancel_at_period_end: true,
   });
 }
 
 // Reactivate subscription
 export async function reactivateSubscription(subscriptionId: string) {
-  return await stripe.subscriptions.update(subscriptionId, {
+  return await getStripe().subscriptions.update(subscriptionId, {
     cancel_at_period_end: false,
   });
 }

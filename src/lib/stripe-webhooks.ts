@@ -3,7 +3,7 @@
 // Processes Stripe events to keep database entitlements in sync
 
 import Stripe from "stripe";
-import { updateUserEntitlements } from "./stripe";
+import { updateUserEntitlements, getStripe } from "./stripe";
 import { db } from "./db";
 
 // Handle checkout.session.completed
@@ -12,7 +12,7 @@ export async function handleCheckoutSessionCompleted(
 ) {
   if (session.client_reference_id) {
     // Update user entitlements for the new subscription
-    const subscription = await stripe.subscriptions.retrieve(
+    const subscription = await getStripe().subscriptions.retrieve(
       session.subscription as string
     );
     await updateUserEntitlements(session.client_reference_id, subscription);
@@ -43,7 +43,7 @@ export async function handleInvoicePaid(invoice: Stripe.Invoice) {
       });
 
       // Refresh entitlements
-      const subscription = await stripe.subscriptions.retrieve(
+      const subscription = await getStripe().subscriptions.retrieve(
         invoice.subscription as string
       );
       await updateUserEntitlements(account.userId, subscription);
@@ -100,5 +100,3 @@ export async function handleSubscriptionDeleted(
   }
 }
 
-// Import stripe here to avoid circular dependencies
-import { stripe } from "./stripe";
