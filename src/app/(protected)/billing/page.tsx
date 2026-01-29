@@ -17,7 +17,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Check, Crown, Zap } from "lucide-react";
 import { StatusMessages } from "@/components/StatusMessages";
-import { useState, useEffect, useRef, useCallback } from "react";
+import { Suspense, useState, useEffect, useRef, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 
 // Define types for subscription data
@@ -40,7 +40,7 @@ interface EntitlementData {
   description?: string;
 }
 
-const BillingPage = () => {
+function BillingContent() {
   const searchParams = useSearchParams();
   const [subscription, setSubscription] = useState<SubscriptionData | null>(
     null,
@@ -333,6 +333,32 @@ const BillingPage = () => {
       </main>
     </div>
   );
-};
+}
 
-export default BillingPage;
+function BillingFallback() {
+  return (
+    <div className="min-h-screen bg-background">
+      <Header />
+      <main className="max-w-4xl mx-auto py-6 sm:px-6 lg:px-8">
+        <div className="px-4 py-6 sm:px-0">
+          <div className="animate-pulse">
+            <div className="h-8 bg-muted rounded w-1/4 mb-4"></div>
+            <div className="h-4 bg-muted rounded w-1/2 mb-8"></div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="h-64 bg-muted rounded"></div>
+              <div className="h-64 bg-muted rounded"></div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}
+
+export default function BillingPage() {
+  return (
+    <Suspense fallback={<BillingFallback />}>
+      <BillingContent />
+    </Suspense>
+  );
+}
