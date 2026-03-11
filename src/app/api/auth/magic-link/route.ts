@@ -57,6 +57,16 @@ export async function POST(request: NextRequest) {
     // Generate magic link URL
     const magicLink = `${process.env.NEXTAUTH_URL}/api/auth/magic-link/verify?token=${token}&email=${encodeURIComponent(email)}`;
 
+    if (!process.env.RESEND_API_KEY) {
+      logger.warn("Magic link not sent: RESEND_API_KEY is not set", {
+        context: "magic-link",
+      });
+      return NextResponse.json(
+        { error: "Email is not configured. Please set RESEND_API_KEY." },
+        { status: 503 }
+      );
+    }
+
     // Send email via Resend
     const resend = new Resend(process.env.RESEND_API_KEY);
 

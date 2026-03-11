@@ -5,13 +5,10 @@
 import { Resend } from "resend";
 import { render } from "@react-email/components";
 
-// Initialize Resend client
-if (!process.env.RESEND_API_KEY) {
-  console.error("❌ RESEND_API_KEY environment variable is not set!");
-  throw new Error("RESEND_API_KEY is required");
-}
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Initialize Resend client only when API key is set (optional for local/dev)
+const resend = process.env.RESEND_API_KEY
+  ? new Resend(process.env.RESEND_API_KEY)
+  : null;
 
 // Email configuration
 export const EMAIL_CONFIG = {
@@ -46,6 +43,14 @@ export async function sendEmail({
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(to)) {
       throw new Error("Invalid recipient email format");
+    }
+
+    if (!resend) {
+      console.warn("Email skipped: RESEND_API_KEY is not set.");
+      return {
+        success: false,
+        error: "Email is not configured (RESEND_API_KEY missing).",
+      };
     }
 
     const fromEmail = `${EMAIL_CONFIG.from.name} <${EMAIL_CONFIG.from.email}>`;
