@@ -160,6 +160,15 @@ enum SubscriptionStatus {
   paused
 }
 
+// Waitlist signups from landing page
+model Waitlist {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+
+  @@map("waitlist")
+}
+
 // AI usage tracking for monitoring and cost control
 model AiUsage {
   id               String   @id @default(cuid())
