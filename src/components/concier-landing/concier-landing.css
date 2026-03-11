@@ -1166,9 +1166,19 @@
 .concier-landing .wl-sub {
   font-size: 16px;
   color: var(--text-dim);
-  margin-bottom: 44px;
+  margin-bottom: 12px;
   position: relative;
   line-height: 1.7;
+}
+
+.concier-landing .wl-tagline {
+  font-family: var(--fm);
+  font-size: 12px;
+  color: rgba(122, 122, 118, 0.55);
+  margin-bottom: 36px;
+  position: relative;
+  line-height: 1.6;
+  font-weight: 400;
 }
 
 .concier-landing .wl-success {

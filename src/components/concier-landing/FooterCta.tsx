@@ -64,6 +64,10 @@ export function FooterCta() {
       <p className="wl-sub fi d1">
         Join the waitlist. First 50 founders get locked-in pricing forever.
       </p>
+      <p className="wl-tagline fi d1">
+        The waitlist isn&apos;t just a queue — it&apos;s where the product gets
+        shaped.
+      </p>
       {!submitted ? (
         <div className="wf-wrap fi d2">
           <div className="wf">
