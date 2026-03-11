@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next";
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
+const baseUrl =
+  process.env.NEXT_PUBLIC_APP_URL || "https://concier.ai";
 
 /**
  * Generate robots.txt configuration
@@ -13,6 +14,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: ["/", "/pricing", "/contact", "/privacy", "/terms"],
       disallow: ["/auth", "/billing", "/product", "/api/"],
     },
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: `${baseUrl.replace(/\/$/, "")}/sitemap.xml`,
   };
 }

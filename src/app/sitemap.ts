@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next";
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
+const baseUrl =
+  (process.env.NEXT_PUBLIC_APP_URL || "https://concier.ai").replace(/\/$/, "");
 
 /**
  * Static routes that should be included in the sitemap

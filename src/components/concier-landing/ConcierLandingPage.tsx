@@ -19,7 +19,7 @@ export function ConcierLandingPage() {
   const [cursor, setCursor] = useState({ x: 0, y: 0 });
   const cursorRef = useRef({ x: 0, y: 0 });
   const trailRef = useRef({ x: 0, y: 0 });
-  const rafRef = useRef<number>();
+  const rafRef = useRef<number | undefined>(undefined);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

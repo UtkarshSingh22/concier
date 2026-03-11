@@ -4,16 +4,8 @@ import { ConcierLandingPage } from "@/components/concier-landing";
 
 export const metadata: Metadata = createHomeMetadata({
   title: "Concier — Your website's AI salesperson",
-  openGraph: {
-    images: [
-      {
-        url: "/og-homepage.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Concier — Your website's AI salesperson",
-      },
-    ],
-  },
+  description:
+    "Your website's AI salesperson. Concier speaks first — at the right moment, with the right message. Join the waitlist.",
 });
 
 export default function Home() {

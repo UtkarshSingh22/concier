@@ -79,23 +79,23 @@ export interface SEODefaults {
  * @customize Change siteName, description, and social handles to match your brand
  */
 export const seoDefaults: SEODefaults = {
-  siteName: process.env.NEXT_PUBLIC_APP_NAME || "Your SaaS",
+  siteName: process.env.NEXT_PUBLIC_APP_NAME || "Concier",
   title: {
-    default: process.env.NEXT_PUBLIC_APP_NAME || "Your SaaS",
-    template: `%s | ${process.env.NEXT_PUBLIC_APP_NAME || "Your SaaS"}`,
+    default: process.env.NEXT_PUBLIC_APP_NAME || "Concier",
+    template: `%s | ${process.env.NEXT_PUBLIC_APP_NAME || "Concier"}`,
   },
   description:
-    "Streamline your workflow with our professional SaaS platform designed for modern teams.",
+    "Your website's AI salesperson. Concier speaks first — at the right moment, with the right message. Join the waitlist.",
   url: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
   ogImage: {
-    url: "/og-image.jpg", // Add this image to your public folder (1200x630px recommended)
+    url: "/opengraph-image", // Generated dynamically via app/opengraph-image.tsx
     width: 1200,
     height: 630,
-    alt: process.env.NEXT_PUBLIC_APP_NAME || "Your SaaS",
+    alt: process.env.NEXT_PUBLIC_APP_NAME || "Concier",
   },
   twitter: {
-    handle: "@yourhandle", // Replace with your Twitter handle
-    site: "@yourhandle", // Replace with your Twitter handle
+    handle: "@concier",
+    site: "@concier",
     cardType: "summary_large_image",
   },
 };
@@ -136,6 +136,7 @@ export function generateMetadata(config: SEOConfig = {}): Metadata {
 
   // Base metadata
   const metadata: Metadata = {
+    metadataBase: new URL(seoDefaults.url),
     title: fullTitle,
     description,
     keywords: keywords?.join(", "),
